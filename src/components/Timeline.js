@@ -2,21 +2,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components"
 import { postPublication,getPublications } from "../service/linkrService";
 
+
 export default function Timeline(){
     const [publications,setPublications]=useState('');
     const [refresh,setRefresh]=useState(false)
     const [button,setButton]=useState('Publish')
-    const id=1; //pegar id junto com o localstorage
-    let obj={
-        "id": "1",
-        "text": "essa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidas",
-        "url": "https://www.hltv.org/matches/2359381/astralis-vs-eternal-fire-blast-premier-fall-showdown-2022-europe",
-        "description": "Complete overview of the Astralis vs. Eternal Fire matchup at BLAST Premier Fall Showdown 2022 Europe!",
-        "image": "https://api.url2png.com/v6/PC48C7F6DF901A9/b7bd0f4355ed8b93df2832a1cc845e38/png/?url=https%3A%2F%2Fwww.hltv.org%2Fmatches%2Fpicture%2F2359381&user_agent=url2pngsecret&thumbnail_max_width=800&viewport=800x418&unique=v2_6665_11251_p_4954_7412_13300_15165_21199_7938_8574_9353_15835_19187",
-        "title": "Astralis vs Eternal Fire at BLAST Premier Fall Showdown 2022 Europe"
-      }
+    const id=2; //pegar id junto com o localstorage
     let userImage="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg"
-    let userName='vito';
+    let userName='victor';
     
     useEffect(()=>{
         getPublications()
@@ -35,27 +28,29 @@ export default function Timeline(){
 
     function Snipet ({url,description,title,image}){
         return (
-            <SnipetDiv>
-                <WrapperSnipetText>
-                    <h1>{title}</h1>
-                    <h2>{description}</h2>
-                    <h3>{url}</h3>
-                </WrapperSnipetText>
-                <WrapperSnipetImg>
-                <img src={image}/>
-                </WrapperSnipetImg>
-            </SnipetDiv>
+            <a href = {url} target="_blank" >
+                <SnipetDiv>
+                    <WrapperSnipetText>
+                        <h1>{title}</h1>
+                        <h2>{description}</h2>
+                        <h3>{url}</h3>
+                    </WrapperSnipetText>
+                    <WrapperSnipetImg>
+                    <img src={image}/>
+                    </WrapperSnipetImg>
+                </SnipetDiv>
+            </a>
         )
 
 
     }
-    function Publication({name,image,text,url,profileImg,title,description}){
+    function Publication({name,image,text,url,urlImage,title,description}){
 
         return(
             <PublicationDiv>
                 <WrapperH>
                 <WrapperPublication>
-                    <img src={profileImg}/>
+                    <img src={urlImage}/>
                     </WrapperPublication>
                 <WrapperPublication>
                     <h1>{name}</h1>
@@ -150,8 +145,8 @@ export default function Timeline(){
                                 description={value.description}
                                 image={value.image}
                                 title={value.title}  
-                                profileImg={userImage}
-                                name={userName}
+                                urlImage={value.urlImage}
+                                name={value.name}
                             ></Publication>
                         )
 
