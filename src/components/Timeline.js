@@ -3,33 +3,54 @@ import styled from "styled-components"
 import { postPublication } from "../service/linkrService";
 
 export default function Timeline(){
-    const [disabled,setDisabled]=useState(false);
+    
     const [button,setButton]=useState('Publish')
     const id=1; //pegar id junto com o localstorage
-    
-
-
-
     let obj={
-        "name":"vito",
-        "img":"https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg",
-        "text":"POST MANEIRO",
-        "link":"https://bootcampra.notion.site/Ter-a-13-09-Trabalhando-com-Branches-2b83967706ad4cd7a17917d96532bbad"
-    };
-    
-    
-    
-    function Publication({name,image,text,link}){
+        "id": "1",
+        "text": "essa familia é muito unidas",
+        "url": "https://www.hltv.org/matches/2359381/astralis-vs-eternal-fire-blast-premier-fall-showdown-2022-europe",
+        "description": "Complete overview of the Astralis vs. Eternal Fire matchup at BLAST Premier Fall Showdown 2022 Europe!",
+        "image": "https://api.url2png.com/v6/PC48C7F6DF901A9/b7bd0f4355ed8b93df2832a1cc845e38/png/?url=https%3A%2F%2Fwww.hltv.org%2Fmatches%2Fpicture%2F2359381&user_agent=url2pngsecret&thumbnail_max_width=800&viewport=800x418&unique=v2_6665_11251_p_4954_7412_13300_15165_21199_7938_8574_9353_15835_19187",
+        "title": "Astralis vs Eternal Fire at BLAST Premier Fall Showdown 2022 Europe"
+      }
+    let userImage="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg"
+    let userName='vito';
+      
+    function Snipet ({url,description,title,image}){
+        return (
+            <SnipetDiv>
+                <WrapperSnipetText>
+                    <h1>{title}</h1>
+                    <h2>{description}</h2>
+                    <h3>{url}</h3>
+                </WrapperSnipetText>
+                <WrapperSnipetImg>
+                <img src={image}/>
+                </WrapperSnipetImg>
+            </SnipetDiv>
+        )
+
+
+    }
+    function Publication({name,image,text,url,profileImg,title,description}){
 
         return(
             <PublicationDiv>
                 <WrapperH>
                 <WrapperPublication>
-                    <img src={image}/>
+                    <img src={profileImg}/>
                     </WrapperPublication>
                 <WrapperPublication>
                     <h1>{name}</h1>
-                   
+                    <p>{text}</p>
+                    <Snipet url={url} description={description} title={title} image={image}
+                    >
+
+                    </Snipet>
+                    
+                    
+                    
                 </WrapperPublication>
                </WrapperH>
 
@@ -47,21 +68,24 @@ export default function Timeline(){
     function AddPublication(){
         const [link,setLink]=useState('');
         const [text,setText]=useState('');
+        const [disabled,setDisabled]=useState(false);
         function createPost (e){
             e.preventDefault();
             let body = {id,text,"url":link};
             setDisabled(!disabled);
-            setButton("Publishing...")
+            setButton("Publishing...");
             postPublication(body)
             .then((answer)=>{
-                setButton("Publish")
+                alert('chego no then')
+                setButton("Publish");
+                setDisabled(!disabled);
             })
             .catch(()=>{
                 alert("There was an error posting your link");
                 setButton("Publish");
+                setDisabled(!disabled);
+
             })
-            
-            
             console.log(body)
         }
         return(
@@ -76,20 +100,20 @@ export default function Timeline(){
                     placeholder = 'http://...'
                     value = {link}
                     required
-                    disable={disabled}
+                    disabled = {disabled}
                     onChange = {(e) => setLink(e.target.value)}
                     >
 
                 </InputLink>
                 <InputText 
                     placeholder = 'Awesome article about #javascript'
-                    disable={disabled}
+                    disabled={disabled}
                     value = {text}
                     type = 'text'
                     onChange = {(e) => setText(e.target.value)}
                     >
                 </InputText>
-                <Button disable={disabled} type='submit' >{button}</Button>
+                <Button disabled={disabled} type='submit' >{button}</Button>
                </WrapperPublication>
                </WrapperForm>
                 
@@ -101,7 +125,16 @@ export default function Timeline(){
              <WrapperH>
                 <Wrapper>
                     <AddPublication></AddPublication>
-                    <Publication image={obj.img} text={obj.text} link={obj.link} name={obj.name} ></Publication>
+                    <Publication 
+                    id={obj.id}
+                    text={obj.text}
+                    url={obj.url}
+                    description={obj.description}
+                    image={obj.image}
+                    title={obj.title}  
+                    profileImg={userImage}
+                    name={userName}
+                    ></Publication>
                 </Wrapper>
                 <Wrapper>
 
@@ -128,6 +161,14 @@ const WrapperPublication = styled(Wrapper)`
         font-size: 19px;
         line-height: 23px;
         color: #FFFFFF;
+    }
+    p{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 20px;
+        color: #B7B7B7;
     }
 `;
 const PublicationDiv = styled.div`
@@ -208,3 +249,48 @@ const WrapperHashtag = styled(WrapperH)`
 
 
 `
+const SnipetDiv = styled(WrapperH)`
+    width: 503px;
+    height: 155px;
+    border: 1px solid #4D4D4D;
+    border-radius: 11px;
+    position: relative;
+
+`
+ const WrapperSnipetText=styled(Wrapper)`
+    width:349.56px;
+    h1{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        color: #CECECE;
+    }
+    h2{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13px;
+        color: #9B9595;
+    }
+    h3{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13px;
+        color: #CECECE;
+    }
+ `;
+ const WrapperSnipetImg=styled(Wrapper)`
+    img{
+        position:absolute;
+        top:0;
+        right:0;
+        width: 153.44px;
+        height: 155px;
+        border-radius: 0px 11px  11px 0px;
+    }
+ `
