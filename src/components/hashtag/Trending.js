@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getHashtagTrending } from "../../service/linkrService";
+import { useNavigate } from "react-router-dom";
 
 export default function Trending() {
   const [tranding, setTranding] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     listHashtags();
@@ -24,7 +26,7 @@ export default function Trending() {
       <HashtagsBox>
       <h3>trending</h3>
         <ul>
-          {tranding.map((hashtag) => <li># {hashtag.text}</li> )}
+          {tranding.map((hashtag) => <li  key={hashtag.id} onClick={()=> navigate(`/hashtag/${hashtag.text}`) } ># {hashtag.text}</li> )}
        </ul>
       </HashtagsBox>
     </>
