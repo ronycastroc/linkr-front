@@ -1,33 +1,32 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getHashtagTranding } from "../../service/linkrService";
 
 export default function Trending() {
+  const [tranding, setTranding] = useState([]);
 
-  const mockData = [
-    "# javascript",
-    "# react",
-    "# react-native",
-    "# material",
-    "# web-dev",
-    "# mobile",
-    "# css",
-    "# html",
-    "# node",
-    "# sql",
-  ];
+  useEffect(() => {
+    listHashtags();
+  }, []);
+
+  function listHashtags() {
+    getHashtagTranding()
+      .then((response) => {
+        setTranding(response.data);
+      })
+      .catch((err) => {
+        alert("Errou ao listar trending");
+      });
+  }
 
   return (
     <>
-       <HashtagsBox>
-        <h3>trending</h3>
+      <HashtagsBox>
+      <h3>trending</h3>
         <ul>
-          {mockData.map((value) => (
-            <li onClick={() => alert("abrir outra pagina")}>{value}</li>
-          ))}
-        </ul>
-      </HashtagsBox> 
-      <p>
-    
-  </p>
+          {tranding.map((hashtag) => <li># {hashtag.text}</li> )}
+       </ul>
+      </HashtagsBox>
     </>
   );
 }
@@ -55,7 +54,7 @@ const HashtagsBox = styled.div`
     border-bottom: 1px solid #484848;
   }
 
-  ul{
+  ul {
     margin-top: 22px;
     margin-left: 16px;
   }

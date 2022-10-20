@@ -26,4 +26,10 @@ function createHeaders() {
     return promise;
   };
 
-  export { postSignUp, postSignIn };
+  function getHashtagTranding () {
+    //const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/teste`);
+    return promise;
+  }
+
+  export { postSignUp, postSignIn,getHashtagTranding  };
