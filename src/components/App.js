@@ -10,9 +10,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={""} />
         </Routes>
-        <Routes>
-         {<Route path="/hashtag" element={<Trending />} /> } 
-        </Routes>
+        <Routes>{<Route path="/hashtag" element={<Trending />} />}</Routes>
       </BrowserRouter>
     </>
   );
