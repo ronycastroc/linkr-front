@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components"
-import { postPublication } from "../service/linkrService";
+import { postPublication,getPublications } from "../service/linkrService";
 
 export default function Timeline(){
-    
+    const [publications,setPublications]=useState('');
+    const [refresh,setRefresh]=useState(false)
     const [button,setButton]=useState('Publish')
     const id=1; //pegar id junto com o localstorage
     let obj={
         "id": "1",
-        "text": "essa familia é muito unidas",
+        "text": "essa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidasessa familia é muito unidas",
         "url": "https://www.hltv.org/matches/2359381/astralis-vs-eternal-fire-blast-premier-fall-showdown-2022-europe",
         "description": "Complete overview of the Astralis vs. Eternal Fire matchup at BLAST Premier Fall Showdown 2022 Europe!",
         "image": "https://api.url2png.com/v6/PC48C7F6DF901A9/b7bd0f4355ed8b93df2832a1cc845e38/png/?url=https%3A%2F%2Fwww.hltv.org%2Fmatches%2Fpicture%2F2359381&user_agent=url2pngsecret&thumbnail_max_width=800&viewport=800x418&unique=v2_6665_11251_p_4954_7412_13300_15165_21199_7938_8574_9353_15835_19187",
@@ -16,7 +17,22 @@ export default function Timeline(){
       }
     let userImage="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg"
     let userName='vito';
-      
+    
+    useEffect(()=>{
+        getPublications()
+         .then((answer)=>{
+            setPublications(answer.data)
+            console.log(publications)
+         })
+         .catch((error)=>{
+            alert("An error occured while trying to fetch the posts, please refresh the page")
+         })
+
+
+    },[refresh]);
+
+
+
     function Snipet ({url,description,title,image}){
         return (
             <SnipetDiv>
@@ -76,17 +92,14 @@ export default function Timeline(){
             setButton("Publishing...");
             postPublication(body)
             .then((answer)=>{
-                alert('chego no then')
-                setButton("Publish");
-                setDisabled(!disabled);
+                setRefresh(!refresh)
             })
             .catch(()=>{
                 alert("There was an error posting your link");
-                setButton("Publish");
-                setDisabled(!disabled);
-
             })
-            console.log(body)
+            setButton("Publish");
+            setDisabled(!disabled);
+            
         }
         return(
             <AddPublicationDiv>
@@ -124,17 +137,31 @@ export default function Timeline(){
         <Wrapper>
              <WrapperH>
                 <Wrapper>
+                
+                    <Title><h1>Timeline</h1></Title>
                     <AddPublication></AddPublication>
-                    <Publication 
-                    id={obj.id}
-                    text={obj.text}
-                    url={obj.url}
-                    description={obj.description}
-                    image={obj.image}
-                    title={obj.title}  
-                    profileImg={userImage}
-                    name={userName}
-                    ></Publication>
+                    {publications?(publications.length===0?(<Title><h1>There are no posts yet</h1></Title>):(
+                        publications.map((value,key)=>
+                            <Publication 
+                                key={key}
+                                id={value.id}
+                                text={value.text}
+                                url={value.url}
+                                description={value.description}
+                                image={value.image}
+                                title={value.title}  
+                                profileImg={userImage}
+                                name={userName}
+                            ></Publication>
+                        )
+
+
+
+
+                    )):(<Title><h1>Loading...</h1></Title>)}
+                    
+                    
+                    
                 </Wrapper>
                 <Wrapper>
 
@@ -153,7 +180,7 @@ const Wrapper = styled.div`
 `;
 const WrapperPublication = styled(Wrapper)`
     align-items:normal;
-    margin-left:18px;   
+    padding-left:20px;   
     h1{
         font-family: 'Lato';
         font-style: normal;
@@ -173,11 +200,14 @@ const WrapperPublication = styled(Wrapper)`
 `;
 const PublicationDiv = styled.div`
     width: 611px;
-    min-height: 276px;
+    
     background: #171717;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 16px;
-    padding-top:16px;   
+    padding-top:20px;   
+    padding-bottom:20px;
+    padding-right:20px;
+    margin-bottom:16px;
     img{
         width: 50px;
         height: 50px;
@@ -189,6 +219,7 @@ const PublicationDiv = styled.div`
 const AddPublicationDiv = styled(PublicationDiv)`
     background: #FFFFFF;
     min-height:209px;
+    margin-bottom:30px;
     h1{
         font-family: 'Lato';
         font-style: normal;
@@ -255,10 +286,14 @@ const SnipetDiv = styled(WrapperH)`
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     position: relative;
-
+    margin-top:15px;
+    
+   
 `
  const WrapperSnipetText=styled(Wrapper)`
     width:349.56px;
+    padding:20px;
+    justify-content: space-between;
     h1{
         font-family: 'Lato';
         font-style: normal;
@@ -266,6 +301,7 @@ const SnipetDiv = styled(WrapperH)`
         font-size: 16px;
         line-height: 19px;
         color: #CECECE;
+        width:100%
     }
     h2{
         font-family: 'Lato';
@@ -274,6 +310,7 @@ const SnipetDiv = styled(WrapperH)`
         font-size: 11px;
         line-height: 13px;
         color: #9B9595;
+        width:100%
     }
     h3{
         font-family: 'Lato';
@@ -282,6 +319,7 @@ const SnipetDiv = styled(WrapperH)`
         font-size: 11px;
         line-height: 13px;
         color: #CECECE;
+        width:100%
     }
  `;
  const WrapperSnipetImg=styled(Wrapper)`
@@ -292,5 +330,18 @@ const SnipetDiv = styled(WrapperH)`
         width: 153.44px;
         height: 155px;
         border-radius: 0px 11px  11px 0px;
+    }
+ `
+ const Title=styled.div`
+    width: 100%;
+    margin-top: 53px;
+    margin-bottom:43px;
+    h1{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 43px;
+    line-height: 64px;
+    color: #FFFFFF;
     }
  `

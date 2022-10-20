@@ -29,4 +29,10 @@ function createHeaders() {
     const promise = axios.post(`${BASE_URL}/timeline`, body);
     return promise;
   };
-  export { postSignUp, postSignIn, postPublication };
+  function getPublications(){
+    const promise = axios.get(`${BASE_URL}/timeline`);
+    return promise;
+  }
+
+
+  export { postSignUp, postSignIn, postPublication ,getPublications};
