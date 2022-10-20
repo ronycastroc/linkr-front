@@ -33,6 +33,12 @@ function createHeaders() {
     const promise = axios.get(`${BASE_URL}/timeline`);
     return promise;
   }
+  function getHashtagTrending () {
+    //const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/trending`);
+    return promise;
+  }
 
+  export { postSignUp, postSignIn, postPublication ,getPublications,getHashtagTrending};
+  
 
-  export { postSignUp, postSignIn, postPublication ,getPublications};
