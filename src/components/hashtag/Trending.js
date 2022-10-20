@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getHashtagTranding } from "../../service/linkrService";
+import { getHashtagTrending } from "../../service/linkrService";
 
 export default function Trending() {
   const [tranding, setTranding] = useState([]);
@@ -10,7 +10,7 @@ export default function Trending() {
   }, []);
 
   function listHashtags() {
-    getHashtagTranding()
+    getHashtagTrending()
       .then((response) => {
         setTranding(response.data);
       })

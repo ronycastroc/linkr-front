@@ -26,10 +26,10 @@ function createHeaders() {
     return promise;
   };
 
-  function getHashtagTranding () {
+  function getHashtagTrending () {
     //const config = createHeaders();
-    const promise = axios.get(`${BASE_URL}/teste`);
+    const promise = axios.get(`${BASE_URL}/trending`);
     return promise;
   }
 
-  export { postSignUp, postSignIn,getHashtagTranding  };
+  export { postSignUp, postSignIn,getHashtagTrending  };
