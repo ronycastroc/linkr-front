@@ -25,5 +25,8 @@ function createHeaders() {
     const promise = axios.post(`${BASE_URL}/auth/sign-in`, body);
     return promise;
   };
-
-  export { postSignUp, postSignIn };
+  function postPublication(body){
+    const promise = axios.post(`${BASE_URL}/timeline`, body);
+    return promise;
+  };
+  export { postSignUp, postSignIn, postPublication };

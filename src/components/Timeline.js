@@ -1,20 +1,26 @@
+import { useState } from "react";
 import styled from "styled-components"
-
+import { postPublication } from "../service/linkrService";
 
 export default function Timeline(){
+    const [disabled,setDisabled]=useState(false);
+    const [button,setButton]=useState('Publish')
+    const id=1; //pegar id junto com o localstorage
     
+
+
+
     let obj={
         "name":"vito",
         "img":"https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg",
         "text":"POST MANEIRO",
         "link":"https://bootcampra.notion.site/Ter-a-13-09-Trabalhando-com-Branches-2b83967706ad4cd7a17917d96532bbad"
-    }
+    };
     
     
     
     function Publication({name,image,text,link}){
-        
-        
+
         return(
             <PublicationDiv>
                 <WrapperH>
@@ -32,11 +38,35 @@ export default function Timeline(){
 
         )
     }
-    function AddPublication(){
+    function Button({...otherProps}){
+        return(
+            <ButtonW {...otherProps}></ButtonW>
+        )
+    }
 
+    function AddPublication(){
+        const [link,setLink]=useState('');
+        const [text,setText]=useState('');
+        function createPost (e){
+            e.preventDefault();
+            let body = {id,text,"url":link};
+            setDisabled(!disabled);
+            setButton("Publishing...")
+            postPublication(body)
+            .then((answer)=>{
+                setButton("Publish")
+            })
+            .catch(()=>{
+                alert("There was an error posting your link");
+                setButton("Publish");
+            })
+            
+            
+            console.log(body)
+        }
         return(
             <AddPublicationDiv>
-               <WrapperH>
+               <WrapperForm onSubmit={createPost}>
                <WrapperPublication>
                 <img src="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg" alt="userImg"></img>
                 </WrapperPublication>
@@ -44,18 +74,24 @@ export default function Timeline(){
                <h1>What are you going to share today?</h1>
                 <InputLink 
                     placeholder = 'http://...'
-                    name = 'link'
-                    type = 'text'>
+                    value = {link}
+                    required
+                    disable={disabled}
+                    onChange = {(e) => setLink(e.target.value)}
+                    >
 
                 </InputLink>
                 <InputText 
                     placeholder = 'Awesome article about #javascript'
-                    name = 'text'
-                    type = 'text'>
+                    disable={disabled}
+                    value = {text}
+                    type = 'text'
+                    onChange = {(e) => setText(e.target.value)}
+                    >
                 </InputText>
-                <Button>Publish</Button>
+                <Button disable={disabled} type='submit' >{button}</Button>
                </WrapperPublication>
-               </WrapperH>
+               </WrapperForm>
                 
             </AddPublicationDiv>
         )
@@ -123,7 +159,7 @@ const AddPublicationDiv = styled(PublicationDiv)`
     }
 `;
 
-const Button = styled.button`
+const ButtonW = styled.button`
     background: #1877F2;
     border-radius: 5px;
     width: 112px;
@@ -164,6 +200,9 @@ const InputText = styled(InputLink)`
 const WrapperH = styled.div`
     display:flex;
 
+`
+const WrapperForm=styled.form`
+    display:flex;
 `
 const WrapperHashtag = styled(WrapperH)`
 
