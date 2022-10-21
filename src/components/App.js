@@ -1,14 +1,20 @@
 import GlobalStyle from "../assets/style/GlobalStyle";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Timeline from "./Timeline";
+import Timeline from "./timeline/Timeline.js";
 import Trending from "./hashtag/Trending";
+import UserContext from "../contexts/Usercontext.js";
+import { useState } from "react";
+
+
 
 export default function App() {
-   return (
+  const [refresh,setRefresh]=useState(false) 
+  
+  return (
       <>
          <GlobalStyle />
-         
-         <BrowserRouter>
+           <BrowserRouter>
+           <UserContext.Provider value={{refresh,setRefresh}}>
             <Routes>
                
                <Route path="/" element={''} />
@@ -16,6 +22,7 @@ export default function App() {
                <Route path="/hashtag" element={<Trending />} />
                
             </Routes>
+            </UserContext.Provider>
          </BrowserRouter>
       </>
    );
