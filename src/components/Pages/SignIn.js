@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postSignIn } from "../../service/linkrService";
@@ -70,7 +71,7 @@ export default function SignIn() {
                   disabled={disabledInput}
                   />
 
-                  <button disabled={disabledInput}>Log In</button>
+                  <Button data-back="Log In" data-front="Log In" disabled={disabledInput}></Button>
 
                   <Link to="/sign-up">
                      <p>First time? Create an account!</p> 
@@ -98,7 +99,7 @@ const AuthBox = styled.div`
 
 const FormContent = styled.div`
    margin: 0 auto;
-   width: 70%;
+   width: 80%;
    min-height: 50vh;
 
    input {
@@ -125,7 +126,7 @@ const FormContent = styled.div`
       font-size: 1.2rem;
     }
 
-   button {
+   /* button {
       margin-top: 3px;
       width: 100%;
       height: 60px;
@@ -144,7 +145,7 @@ const FormContent = styled.div`
    button:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-   }
+   } */
 
    p {
       text-align: center;
@@ -155,4 +156,71 @@ const FormContent = styled.div`
    }
 `;
 
-export { AuthBox, FormContent };
+const Button = styled.button`
+   margin: 0 auto;
+   opacity: 1;
+	outline: 0;
+	background-color: #1877F2;
+	position: relative;
+	text-align: center;
+	letter-spacing: 1px;
+	display: inline-block;
+	text-decoration: none;
+   width: 100%;
+   border: none;
+   border-radius: 6px;
+   font-weight: 700;
+   cursor: pointer;
+	
+	&:hover{
+		
+		&:after{
+			opacity: 1;
+			transform: translateY(0) rotateX(0);
+		}
+		
+		&:before{
+			opacity: 0;
+			transform: translateY(50%) rotateX(90deg);
+		}
+	}
+	
+	&:after{
+      line-height: 50px;
+      height: 100%;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		width: 100%;
+		color: #FFFFFF;
+		display: block;
+		transition: 0.5s;
+		position: absolute;
+		background: #151515;
+		content: attr(data-back);
+		transform: translateY(-50%) rotateX(90deg);
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;      
+	}
+	
+	&:before{
+      line-height: 50px;
+      width: 100%;    
+		top: 0;
+		left: 0;
+		opacity: 1;
+		color: #FFFFFF;
+		display: block;
+		transition: 0.5s;
+		position: relative;
+		background: #1877F2;
+		content: attr(data-front);
+		transform: translateY(0) rotateX(0);
+      border: none;
+      font-size: 1rem;
+      border-radius: 6px;
+	}
+`;
+
+export { AuthBox, FormContent, Button };
