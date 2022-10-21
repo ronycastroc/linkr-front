@@ -21,12 +21,12 @@ export default function App() {
            <UserContext.Provider value={{refresh,setRefresh}}>
             <Routes>
                
-               <Route path="/" element={''} />
+               <Route path="/" element={<SignIn />} />
                <Route path="/sign-up" element={<SignUp />} />
                <Route path="/home" element={<Header/>} />
                <Route path="/timeline" element={<Timeline/>}/>
                <Route path="/hashtag" element={<Trending />} />
-               
+              
             </Routes>
             </UserContext.Provider>
          </BrowserRouter>

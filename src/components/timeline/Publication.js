@@ -4,10 +4,7 @@ import UserContext from "../../contexts/Usercontext.js";
 import { useContext, useState } from "react";
 import styled from "styled-components";
 import {postPublication} from "../../service/linkrService"
-
-let userImage="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg"
-let userName='victor';
-const id=2; //pegar id junto com o localstorage
+import React from "react"
 
 function Publication({name,image,text,url,urlImage,title,description}){
 
@@ -36,30 +33,35 @@ function AddPublication(){
     const {refresh,setRefresh}=useContext(UserContext)
     const [link,setLink]=useState('');
     const [text,setText]=useState('');
-    const [disabled,setDisabled]=useState(false);
+    const [disabled,setDisabled]=useState('');
     const [button,setButton]=useState('Publish')
+    const userImage=JSON.parse(localStorage.getItem("perfilImage"))
+    const userId=JSON.parse(localStorage.getItem("userId"))
     
     function createPost (e){
         e.preventDefault();
-        let body = {id,text,"url":link};
-        setDisabled(!disabled);
+        let body = {id:userId,text,"url":link};
+    
+        setDisabled("disabled");
         setButton("Publishing...");
         postPublication(body)
         .then((answer)=>{
             setRefresh(!refresh)
+            setText('');
+            setLink('');
         })
         .catch(()=>{
             alert("There was an error posting your link");
         })
+        setDisabled('');
         setButton("Publish");
-        setDisabled(!disabled);
         
     }
     return(
         <AddPublicationDiv>
            <WrapperForm onSubmit={createPost}>
            <WrapperPublication>
-            <img src="https://assets.puzzlefactory.pl/puzzle/204/185/original.jpg" alt="userImg"></img>
+            <img src={userImage} alt="userImg"></img>
             </WrapperPublication>
            <WrapperPublication>
            <h1>What are you going to share today?</h1>

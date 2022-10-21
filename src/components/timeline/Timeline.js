@@ -3,6 +3,7 @@ import styled from "styled-components"
 import {getPublications } from "../../service/linkrService";
 import {Publication,AddPublication} from "./Publication.js"
 import UserContext from "../../contexts/Usercontext.js";
+import React from "react"
 
 export default function Timeline(){
     const [publications,setPublications]=useState('');

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getHashtagTrending } from "../../service/linkrService";
-
+import React from "react"
 export default function Trending() {
   const [tranding, setTranding] = useState([]);
 
