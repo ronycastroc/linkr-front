@@ -5,7 +5,6 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import TimeLineExample from "./Pages/TimeLineExample";
 import Header from "./header/Header";
-
 import HashtagPage from "./hashtag/HashtagPage"
 
 export default function App() {

@@ -27,13 +27,13 @@ function createHeaders() {
   };
 
   function getHashtagTrending () {
-    //const config = createHeaders();
     const promise = axios.get(`${BASE_URL}/trending`);
     return promise;
   }
 
   function getHashtagPosts({hashtagName}){
-    const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`);
+    const config = createHeaders();
+    const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`,config);
     return promise;
   }
 

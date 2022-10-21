@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getHashtagPosts } from "../../service/linkrService";
+import HeaderLogout from "../HeaderLogout";
 
 export default function PostTeste({hashtagName}) {
 const [posts, setPosts] = useState([]);
@@ -22,6 +23,7 @@ function listPosts() {
 
   return (
     <>
+      <HeaderLogout />
       {posts.length === 0 ? <></> : posts.map((value) => <HashtagsBox>{value.hashtag}</HashtagsBox>)}     
     </>
   );

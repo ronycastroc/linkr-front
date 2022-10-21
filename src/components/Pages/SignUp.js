@@ -4,6 +4,7 @@ import { postSignUp } from "../../service/linkrService";
 import { AuthBox, FormContent } from "./SignIn";
 import LogoBox from "../LogoBox";
 import styled from "styled-components";
+import React from "react";
 
 export default function SignUp() {
    const [email, setEmail] = useState("");

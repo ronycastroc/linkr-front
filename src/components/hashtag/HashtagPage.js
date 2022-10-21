@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import PostTeste from "./PostTeste";
 import Title from "./Title";
 import { useState } from "react";
+import HeaderLogout from "../HeaderLogout";
 
 export default function HashtagPage(){
 const { hashtag } = useParams();
@@ -12,6 +13,7 @@ console.log(hashtag)
 
 return(
     <>
+    <HeaderLogout />
     <Title data= {`# ${hashtag}`}  />
     <PostTeste hashtagName={hashtag}/>
     <Trending />
