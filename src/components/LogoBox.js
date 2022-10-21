@@ -15,7 +15,7 @@ export default function LogoBox() {
 const Wrapper = styled.div`
    width: 62%;
    height: 100vh;
-   background-color: #151515;
+   background-color: #151515;  
 
       h1 {
          color: #FFFFFF;
@@ -33,5 +33,31 @@ const Wrapper = styled.div`
          margin-left: 10vw;
          font-family: 'Oswald', sans-serif;
       }
+
+      @media (max-width: 650px) {
+         width: 100%;
+         height: 35vh;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+
+         div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+         }
+
+         h1 {
+            margin-top: 0px;
+            margin-left: 0px;
+            font-size: 4.5rem;
+         }
+
+         h2 {         
+         font-size: 1.8rem;
+         margin-left: 0px;
+      }
+  }
    
 `;

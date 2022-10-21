@@ -87,6 +87,10 @@ export default function SignIn() {
 
 const Wrapper = styled.div`
    display: flex;
+
+   @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 
 const AuthBox = styled.div`
@@ -95,6 +99,12 @@ const AuthBox = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
+
+   @media (max-width: 650px) {
+    width: 100%;
+    align-items: initial;
+    padding-top: 30px;
+  }
 `;
 
 const FormContent = styled.div`
@@ -124,36 +134,27 @@ const FormContent = styled.div`
       font-weight: 700;
       font-family: 'Oswald', sans-serif;
       font-size: 1.2rem;
-    }
-
-   /* button {
-      margin-top: 3px;
-      width: 100%;
-      height: 60px;
-      border: none;
-      border-radius: 6px;
-      font-weight: 700;
-      font-family: 'Oswald', sans-serif;
-      font-size: 1.2rem;
-      background-color: #1877F2;
-      color: #FFFFFF;
-      cursor: pointer; 
-      transition: 0.2s;
-      position: relative;
-   }
-
-   button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-   } */
+   } 
 
    p {
       text-align: center;
       margin-top: 15px;
       color: #FFFFFF;
       text-decoration: underline;
-
    }
+
+   @media (max-width: 650px) {
+    width: 90%;
+
+    input {
+      height: 50px;
+      font-size: 1.1rem;
+    }
+
+    input::placeholder {
+      font-size: 1.1rem;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -201,7 +202,11 @@ const Button = styled.button`
 		transform: translateY(-50%) rotateX(90deg);
       border: none;
       border-radius: 6px;
-      font-size: 1rem;      
+      font-size: 1rem;
+      
+      @media (max-width: 650px) {
+         line-height: 40px;
+      }      
 	}
 	
 	&:before{
@@ -220,6 +225,10 @@ const Button = styled.button`
       border: none;
       font-size: 1rem;
       border-radius: 6px;
+
+      @media (max-width: 650px) {
+         line-height: 40px;
+      }      
 	}
 `;
 

@@ -134,4 +134,8 @@ export default function SignUp() {
 
 const Wrapper = styled.div`
     display: flex;
+
+    @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
