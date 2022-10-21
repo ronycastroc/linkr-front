@@ -1,7 +1,8 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postSignUp } from "../../service/linkrService";
-import { AuthBox, FormContent } from "./SignIn";
+import { AuthBox, FormContent, Button } from "./SignIn";
 import LogoBox from "../LogoBox";
 import styled from "styled-components";
 
@@ -119,7 +120,7 @@ export default function SignUp() {
                   disabled={disabledInput}
                   />
 
-                  <button disabled={disabledInput}>Sign Up</button>
+                  <Button data-back="Sign Up" data-front="Sign Up" disabled={disabledInput}></Button>
 
                   <Link to="/">
                      <p>Switch back to log in</p> 
@@ -133,4 +134,8 @@ export default function SignUp() {
 
 const Wrapper = styled.div`
     display: flex;
+
+    @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
