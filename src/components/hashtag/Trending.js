@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getHashtagTrending } from "../../service/linkrService";
@@ -15,12 +16,11 @@ export default function Trending() {
     getHashtagTrending()
       .then((response) => {
         setTranding(response.data);
-      })
+     })
       .catch((err) => {
-        alert("Errou ao listar trending");
+        alert("Erro ao listar trending");
       });
   }
-
   return (
     <>
       <HashtagsBox>
@@ -34,7 +34,7 @@ export default function Trending() {
 }
 
 const HashtagsBox = styled.div`
-  position: relative;
+  position: absolute;
   top: 232px;
   left: 877px;
   width: 301px;

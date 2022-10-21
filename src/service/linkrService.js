@@ -32,4 +32,9 @@ function createHeaders() {
     return promise;
   }
 
-  export { postSignUp, postSignIn,getHashtagTrending  };
+  function getHashtagPosts({hashtagName}){
+    const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`);
+    return promise;
+  }
+
+  export { postSignUp, postSignIn, getHashtagTrending, getHashtagPosts  };
