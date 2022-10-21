@@ -26,6 +26,9 @@ export default function SignIn() {
          setDisabledInput(false);
          localStorage.setItem("perfilImage", JSON.stringify(res.data.urlImage));
          localStorage.setItem("token", JSON.stringify(res.data.token));
+         localStorage.setItem("userId", JSON.stringify(res.data.userId));
+
+
          navigate("/timeline");
       })
       .catch((res) => {
