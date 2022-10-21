@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import { RiDeleteBin7Fill } from "react-icons/ri";
 import Modal from "react-modal";
+import { deletePost } from "../../service/linkrService";
 
 const customStyles = {
   content: {
@@ -23,7 +24,7 @@ const customStyles = {
   },
 };
 
-export default function DeletePost() {
+export default function ModalDelete(postId) {
   let subtitle;
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -39,9 +40,18 @@ export default function DeletePost() {
     setIsOpen(false);
   }
 
+  function delPost() {
+    const promise = deletePost(postId);
+    promise
+      .then(setIsOpen(false))
+      .catch(() =>
+        alert(`An error has occurred, the post couldn't be deleted`)
+      );
+  }
+
   return (
     <div>
-      <button onClick={openModal}>Open Modal</button>
+      <RiDeleteBin7Fill color="white" onClick={openModal} />
 
       <Modal
         appElement={document.getElementsByClassName("root") || undefined}
@@ -50,7 +60,7 @@ export default function DeletePost() {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Delete Post Modal"
-        shouldCloseOnOverlayClick={false}
+        shouldCloseOnOverlayClick={true}
       >
         <Confirmation>
           <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
@@ -60,7 +70,7 @@ export default function DeletePost() {
 
         <Options>
           <BackButton onClick={closeModal}>No, go back</BackButton>
-          <ConfirmDeleteButton onClick={closeModal}>
+          <ConfirmDeleteButton onClick={delPost}>
             Yes, delete it
           </ConfirmDeleteButton>
         </Options>
