@@ -1,3 +1,5 @@
+import axios from "axios"
+import {DebounceInput} from 'react-debounce-input';
 import React, { useState } from "react"
 import styled from "styled-components"
 import {IoSearchOutline} from "react-icons/io5"
@@ -5,6 +7,7 @@ import { IconContext } from "react-icons";
 import axios from "axios"
 import {DebounceInput} from 'react-debounce-input'
 import { useNavigate } from "react-router-dom";
+
 
 
 export default function Header(){
@@ -159,4 +162,4 @@ const StyledHeader = styled.div`
 
 
 
-          //<input required type="text" id="seearch" placeholder="Procure por Pessoas" onChange={SearchUsers} />
+          //<input required type="text" id="seearch" placeholder="Procure por Pessoas" onChange={SearchUsers} /> 
