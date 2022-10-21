@@ -4,8 +4,6 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import {IoSearchOutline} from "react-icons/io5"
 import { IconContext } from "react-icons";
-import axios from "axios"
-import {DebounceInput} from 'react-debounce-input'
 import { useNavigate } from "react-router-dom";
 
 
