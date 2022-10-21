@@ -26,11 +26,13 @@ function createHeaders() {
     return promise;
   };
   function postPublication(body){
-    const promise = axios.post(`${BASE_URL}/timeline`, body);
+    const config = createHeaders();
+    const promise = axios.post(`${BASE_URL}/timeline`, body,config);
     return promise;
   };
   function getPublications(){
-    const promise = axios.get(`${BASE_URL}/timeline`);
+    const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/timeline`,config);
     return promise;
   }
   function getHashtagTrending () {
