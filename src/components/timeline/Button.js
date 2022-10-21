@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react"
+
 function Button({...otherProps}){
     return(
         <ButtonW {...otherProps}></ButtonW>

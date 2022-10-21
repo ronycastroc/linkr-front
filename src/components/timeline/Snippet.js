@@ -1,4 +1,4 @@
-import React from "react"
+
 import styled from "styled-components"
 
 function Snippet ({url,description,title,image}){
@@ -74,8 +74,8 @@ const WrapperSnippetText=styled.div`
         position:absolute;
         top:0;
         right:0;
-        width: 154px;
-        height: 154px;
-        border-radius: 0px 11px  11px 0px;
+        width: 154px !important;
+        height: 154px !important;
+        border-radius: 0px 11px  11px 0px !important;
     }
  `

@@ -4,7 +4,7 @@ import UserContext from "../../contexts/Usercontext.js";
 import { useContext, useState } from "react";
 import styled from "styled-components";
 import {postPublication} from "../../service/linkrService"
-import React from "react"
+
 
 function Publication({name,image,text,url,urlImage,title,description}){
 

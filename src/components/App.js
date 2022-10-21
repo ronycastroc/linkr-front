@@ -1,4 +1,4 @@
-import React from "react";
+
 import GlobalStyle from "../assets/style/GlobalStyle";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Timeline from "./timeline/Timeline.js";
