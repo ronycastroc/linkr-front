@@ -41,9 +41,10 @@ function getHashtagTrending() {
   return promise;
 }
 
-function deletePost(body) {
+function deletePost(postId) {
   const config = createHeaders();
-  const promise = axios.delete(`${BASE_URL}/timeline`, body, config);
+  config.headers.data = postId.postId;
+  const promise = axios.delete(`${BASE_URL}/timeline/${postId.postId}`, config);
   return promise;
 }
 

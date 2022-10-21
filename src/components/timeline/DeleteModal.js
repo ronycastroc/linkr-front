@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import Modal from "react-modal";
 import { deletePost } from "../../service/linkrService";
+import UserContext from "../../contexts/Usercontext";
 
 const customStyles = {
   content: {
@@ -27,6 +28,8 @@ const customStyles = {
 export default function ModalDelete(postId) {
   let subtitle;
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { refresh, setRefresh } = useContext(UserContext);
 
   function openModal() {
     setIsOpen(true);
@@ -42,9 +45,14 @@ export default function ModalDelete(postId) {
 
   function delPost() {
     const promise = deletePost(postId);
+    setLoading(true);
     promise
-      .then(setIsOpen(false))
-      .catch(() =>
+      .then(() => {
+        setIsOpen(false);
+        setRefresh(!refresh);
+        setLoading(false);
+      })
+      .catch((err) =>
         alert(`An error has occurred, the post couldn't be deleted`)
       );
   }
@@ -52,29 +60,44 @@ export default function ModalDelete(postId) {
   return (
     <div>
       <RiDeleteBin7Fill color="white" onClick={openModal} />
+      {loading ? (
+        <Modal
+          appElement={document.getElementsByClassName("root") || undefined}
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Delete Post Modal"
+          shouldCloseOnOverlayClick={true}
+        >
+          <Confirmation>
+            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Loading...</h2>
+          </Confirmation>
+        </Modal>
+      ) : (
+        <Modal
+          appElement={document.getElementsByClassName("root") || undefined}
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Delete Post Modal"
+          shouldCloseOnOverlayClick={true}
+        >
+          <Confirmation>
+            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
+              Are you sure you want to delete this post?
+            </h2>
+          </Confirmation>
 
-      <Modal
-        appElement={document.getElementsByClassName("root") || undefined}
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Delete Post Modal"
-        shouldCloseOnOverlayClick={true}
-      >
-        <Confirmation>
-          <h2 ref={(_subtitle) => (subtitle = _subtitle)}>
-            Are you sure you want to delete this post?
-          </h2>
-        </Confirmation>
-
-        <Options>
-          <BackButton onClick={closeModal}>No, go back</BackButton>
-          <ConfirmDeleteButton onClick={delPost}>
-            Yes, delete it
-          </ConfirmDeleteButton>
-        </Options>
-      </Modal>
+          <Options>
+            <BackButton onClick={closeModal}>No, go back</BackButton>
+            <ConfirmDeleteButton onClick={delPost}>
+              Yes, delete it
+            </ConfirmDeleteButton>
+          </Options>
+        </Modal>
+      )}
     </div>
   );
 }
