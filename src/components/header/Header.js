@@ -4,11 +4,13 @@ import {IoSearchOutline} from "react-icons/io5"
 import { IconContext } from "react-icons";
 import axios from "axios"
 import {DebounceInput} from 'react-debounce-input'
+import { useNavigate } from "react-router-dom";
 
 
 export default function Header(){
 
     const [ searchs, setSearch ] = useState([])
+    let navigate = useNavigate()
 
     async function SearchUsers(event){
         //event.preventDefault()
@@ -47,7 +49,7 @@ export default function Header(){
                         const delay = `${idx + 1}00ms`
                         return (
                             <ul>
-                                <li key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
+                                <li onClick={() => navigate(`user/${search.id}`)} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
                             </ul>
                         )
                    })} 
