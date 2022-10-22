@@ -1,12 +1,19 @@
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
-import { likePost, unlikePost, getLikes } from "../../service/linkrService";
+import {
+  likePost,
+  unlikePost,
+  getLikes,
+  getUserLikes,
+} from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext.js";
 
 export default function Like(postId) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState("");
+  const [likedByUser, setLikedByUser] = useState(false);
   const { refresh, setRefresh } = useContext(UserContext);
+  const userId = JSON.parse(localStorage.getItem("userId"));
 
   useEffect(() => {
     getLikes(postId)
@@ -17,6 +24,22 @@ export default function Like(postId) {
       .catch((error) => {
         console.log(
           "An error occured while trying to fetch likes, please refresh the page"
+        );
+      });
+  }, [refresh]);
+
+  useEffect(() => {
+    getUserLikes(postId, userId)
+      .then((answer) => {
+        if (answer.data.userId === userId) {
+          setLiked(true);
+        }
+
+        console.log(answer.data.userId);
+      })
+      .catch((error) => {
+        console.log(
+          "An error occured while trying to fetch user likes, please refresh the page"
         );
       });
   }, [refresh]);
@@ -43,7 +66,7 @@ export default function Like(postId) {
 
   return (
     <>
-      {liked || likeCount !== 0 ? (
+      {liked ? (
         <>
           <AiFillHeart
             color="red"
