@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import styled from "styled-components";
 import { postPublication } from "../../service/linkrService";
 import ModalDelete from "./DeleteModal.js";
-import Like from "./likePublication.js";
+import Like from "./LikePublication.js";
 
 function Publication({
   id,
