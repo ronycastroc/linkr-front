@@ -9,6 +9,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import TimeLineExample from "./Pages/TimeLineExample";
 import Header from "./header/Header";
+import TimelineUser from "./header/TimelineUser";
 
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
                <Route path="/home" element={<Header/>} />
                <Route path="/timeline" element={<Timeline/>}/>
                <Route path="/hashtag" element={<Trending />} />
+               <Route path="/user/:id" element={<TimelineUser />} />
               
             </Routes>
             </UserContext.Provider>
