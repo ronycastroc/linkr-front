@@ -11,7 +11,6 @@ import UserContext from "../../contexts/Usercontext.js";
 export default function Like(postId) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState("");
-  const [likedByUser, setLikedByUser] = useState(false);
   const { refresh, setRefresh } = useContext(UserContext);
   const userId = JSON.parse(localStorage.getItem("userId"));
 
@@ -66,7 +65,7 @@ export default function Like(postId) {
 
   return (
     <>
-      {liked ? (
+      {liked && likeCount !== 0 ? (
         <>
           <AiFillHeart
             color="red"
