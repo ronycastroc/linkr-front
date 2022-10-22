@@ -52,9 +52,17 @@ export default function ModalDelete(postId) {
         setRefresh(!refresh);
         setLoading(false);
       })
-      .catch((err) =>
-        alert(`An error has occurred, the post couldn't be deleted`)
-      );
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert(`You can only delete you own posts!`);
+          setIsOpen(false);
+          setLoading(false);
+        } else {
+          alert(`An error has occurred, the post couldn't be deleted`);
+          setIsOpen(false);
+          setLoading(false);
+        }
+      });
   }
 
   return (

@@ -4,8 +4,8 @@ import UserContext from "../../contexts/Usercontext.js";
 import { useContext, useState } from "react";
 import styled from "styled-components";
 import { postPublication } from "../../service/linkrService";
-
 import ModalDelete from "./DeleteModal.js";
+import Like from "./LikePublication.js";
 
 function Publication({
   id,
@@ -22,6 +22,9 @@ function Publication({
       <WrapperH>
         <WrapperPublication>
           <img src={urlImage} />
+          <LikeDiv>
+            <Like postId={id} />
+          </LikeDiv>
         </WrapperPublication>
         <WrapperPublication>
           <Icons>
@@ -188,4 +191,13 @@ const Icons = styled.div`
   justify-content: center;
   position: absolute;
   right: 0;
+`;
+
+const LikeDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  cursor: pointer;
 `;
