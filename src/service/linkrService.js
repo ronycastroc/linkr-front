@@ -50,7 +50,11 @@ function deletePost(postId) {
 
 function likePost(postId) {
   const config = createHeaders();
-  const promise = axios.post(`${BASE_URL}/like`, postId, config);
+  const promise = axios.post(
+    `${BASE_URL}/like/${postId.postId}`,
+    postId,
+    config
+  );
   return promise;
 }
 
@@ -58,6 +62,11 @@ function unlikePost(postId) {
   const config = createHeaders();
   config.headers.data = postId.postId;
   const promise = axios.delete(`${BASE_URL}/like/${postId.postId}`, config);
+  return promise;
+}
+
+function getLikes(postId) {
+  const promise = axios.get(`${BASE_URL}/like/${postId.postId}`);
   return promise;
 }
 
@@ -70,4 +79,5 @@ export {
   deletePost,
   likePost,
   unlikePost,
+  getLikes,
 };

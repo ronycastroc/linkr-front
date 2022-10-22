@@ -195,6 +195,7 @@ const Icons = styled.div`
 
 const LikeDiv = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 25px;
