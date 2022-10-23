@@ -7,7 +7,7 @@ import { IconContext } from "react-icons";
 
 
 
-export default function Header(){
+export default function Search(){
 
     const [ searchs, setSearch ] = useState([])
 
@@ -62,12 +62,10 @@ const StyledHeader = styled.div`
     max-width: 563px;
     min-height: 45px;
     margin: 0 auto;
-    background: #E7E7E7;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    margin-top: 20px; // tirar esse campo no final 
-    //padding: 0 17px;
+    
 
     form {
         display: flex;
@@ -90,6 +88,7 @@ const StyledHeader = styled.div`
         font-size: 19px;
         line-height: 23px;
         color: #C6C6C6;
+        width: 30vw;
         
     }
 

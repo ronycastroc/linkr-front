@@ -3,6 +3,7 @@ import styled from "styled-components"
 import {getPublications } from "../../service/linkrService";
 import {Publication,AddPublication} from "./Publication.js"
 import UserContext from "../../contexts/Usercontext.js";
+import HeaderLogout from "../HeaderLogout";
 
 
 export default function Timeline(){
@@ -25,6 +26,8 @@ export default function Timeline(){
         <Wrapper>
              <WrapperH>
                 <Wrapper>
+                    <HeaderLogout />
+
                     <Title><h1>Timeline</h1></Title>
                     <AddPublication></AddPublication>
                     {publications?(publications.length===0?(<Title><h1>There are no posts yet</h1></Title>):(
@@ -65,7 +68,7 @@ const WrapperH = styled.div`
 `
  const Title=styled.div`
     width: 100%;
-    margin-top: 53px;
+    margin-top: 100px;
     margin-bottom:43px;
     h1{
     font-family: 'Oswald';

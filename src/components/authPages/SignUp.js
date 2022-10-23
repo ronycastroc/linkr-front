@@ -51,12 +51,20 @@ export default function SignUp() {
          navigate("/");
       })
       .catch((res) => {
+         if(res.message === "Network Error") {
+            resetForm();  
+            alert(`Erro ao enviar requisição, tente novamente mais tarde. (${res.message})`);
+            setDisabledInput(false);
+            return;
+         }
+
          if(res.response.status === 409) {
             setEmail("");            
             alert(`Email já cadastrado, digite outro email. (${res.response.status} - ${res.response.data})`);
             setDisabledInput(false);
             return;
          }
+         
          resetForm();                
          alert(`Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`);
          setDisabledInput(false);  

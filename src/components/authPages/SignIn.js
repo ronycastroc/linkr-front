@@ -28,20 +28,25 @@ export default function SignIn() {
          localStorage.setItem("perfilImage", JSON.stringify(res.data.urlImage));
          localStorage.setItem("token", JSON.stringify(res.data.token));
          localStorage.setItem("userId", JSON.stringify(res.data.userId));
-
-
          navigate("/timeline");
       })
-      .catch((res) => {
+      .catch((res) => {         
+         if(res.message === "Network Error") {
+            resetForm();  
+            alert(`Erro ao enviar requisição, tente novamente mais tarde. (${res.message})`);
+            setDisabledInput(false);
+            return;
+         }
+
          if(res.response.status === 401) {
             resetForm();            
             alert(`Seu email ou senha estão incorretos, digite novamente. (${res.response.status} - ${res.response.data})`);
             setDisabledInput(false);
             return;
          }
-         resetForm();
-         setDisabledInput(false);
+         resetForm();         
          alert(`Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`);
+         setDisabledInput(false);
       })
    };
 

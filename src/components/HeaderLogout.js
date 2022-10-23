@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
+import Search from "./header/Search";
 import styled from "styled-components";
 
 export default function HeaderLogout() {
@@ -22,6 +23,8 @@ export default function HeaderLogout() {
                 <Logo>
                     <h1>linkr</h1>
                 </Logo>
+
+                <Search />
 
                 <ProfileLogout onClick={() => setShowLogout(!showLogout)}>
                     {showLogout ? 
@@ -45,6 +48,7 @@ const Header = styled.div`
     height: 72px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     position: fixed;
     top: 0;
     z-index: 1;
