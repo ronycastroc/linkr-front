@@ -1,32 +1,40 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getHashtagTrending } from "../../service/linkrService";
+import { getHashtagPosts, getHashtagTrending } from "../../service/linkrService";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../../contexts/Usercontext";
+import { useContext } from "react";
+import { ReactTagify } from "react-tagify";
 
-export default function Trending() {
+export default function Trending({onClick}) {
   const [tranding, setTranding] = useState([]);
+  const {refresh}=useContext(UserContext);
+  const {reload} = useContext(UserContext);
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     listHashtags();
-  }, []);
+  },[refresh]);
 
+  
   function listHashtags() {
     getHashtagTrending()
       .then((response) => {
         setTranding(response.data);
-     })
+       })
       .catch((err) => {
-        alert("Erro ao listar trending");
+        console.log(err)
+        alert("Error trying to list hashtags trending");
       });
   }
   return (
     <>
       <HashtagsBox>
-      <h3>trending</h3>
+        <h3>trending</h3>
         <ul>
-          {tranding.map((hashtag) => <li  key={hashtag.id} onClick={()=> navigate(`/hashtag/${hashtag.text}`) } ># {hashtag.text}</li> )}
+          {tranding.map((hashtag, key) => <li  key={key} onClick={()=> onClick(hashtag.text) } ># {hashtag.text}</li> )}
        </ul>
       </HashtagsBox>
     </>
@@ -34,9 +42,9 @@ export default function Trending() {
 }
 
 const HashtagsBox = styled.div`
-  position: absolute;
-  top: 232px;
-  left: 877px;
+  position: relative;
+  top: 160px;
+  left:4%;
   width: 301px;
   height: 406px;
   background-color: #171717;

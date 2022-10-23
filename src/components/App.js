@@ -20,7 +20,6 @@ export default function App() {
            <BrowserRouter>
            <UserContext.Provider value={{refresh,setRefresh}}>
             <Routes>
-               
                <Route path="/" element={<SignIn />} />
                <Route path="/sign-up" element={<SignUp />} />
                <Route path="/home" element={<Header/>} />

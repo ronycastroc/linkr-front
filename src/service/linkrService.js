@@ -37,11 +37,12 @@ function createHeaders() {
     return promise;
   }
   function getHashtagTrending () {
-    const promise = axios.get(`${BASE_URL}/trending`);
+    const config = createHeaders();
+    const promise = axios.get(`${BASE_URL}/trending`, config);
     return promise;
   }
 
-  function getHashtagPosts({hashtagName}){
+  function getHashtagPosts(hashtagName){
     const config = createHeaders();
     const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`,config);
     return promise;

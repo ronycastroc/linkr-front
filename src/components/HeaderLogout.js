@@ -49,6 +49,7 @@ const Header = styled.div`
     position: fixed;
     top: 0;
     z-index: 1;
+    
 `;
 
 const Logo = styled.div`

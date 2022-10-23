@@ -16,7 +16,7 @@ const TitleWrapper = styled.p`
   width: 80%;
   height: 64px;
   left: 241px;
-  top: 125px;
+  top: 22%;
 
   font-family: "Oswald";
   font-style: normal;
