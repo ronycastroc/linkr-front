@@ -28,6 +28,7 @@ export default function SignIn() {
         localStorage.setItem("perfilImage", JSON.stringify(res.data.urlImage));
         localStorage.setItem("token", JSON.stringify(res.data.token));
         localStorage.setItem("userId", JSON.stringify(res.data.userId));
+        localStorage.setItem("name", JSON.stringify(res.data.name));
         console.log(res.data);
 
         navigate("/timeline");
