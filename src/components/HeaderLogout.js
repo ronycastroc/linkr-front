@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
-import Search from "./header/Search";
+import Search from "./search/Search";
 import styled from "styled-components";
 
 export default function HeaderLogout() {

@@ -8,7 +8,7 @@ import { useState } from "react";
 import SignIn from "./authPages/SignIn";
 import SignUp from "./authPages/SignUp";
 import TimeLineExample from "./authPages/TimeLineExample";
-import Header from "./header/Search";
+import Header from "./search/Search";
 
 
 export default function App() {
