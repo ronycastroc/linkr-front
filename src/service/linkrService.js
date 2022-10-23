@@ -69,6 +69,15 @@ function getLikes(postId) {
   const promise = axios.get(`${BASE_URL}/like/${postId.postId}`);
   return promise;
 }
+function getUserLikes(postId, userId) {
+  const promise = axios.get(`${BASE_URL}/like/${postId.postId}/${userId}`);
+  return promise;
+}
+
+function getLikesInfo(postId) {
+  const promise = axios.get(`${BASE_URL}/likes/${postId.postId}`);
+  return promise;
+}
 
 export {
   postSignUp,
@@ -80,4 +89,6 @@ export {
   likePost,
   unlikePost,
   getLikes,
+  getUserLikes,
+  getLikesInfo,
 };
