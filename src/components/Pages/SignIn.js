@@ -1,9 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postSignIn } from "../../service/linkrService";
 import LogoBox from "../LogoBox";
 import styled from "styled-components";
+import React from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

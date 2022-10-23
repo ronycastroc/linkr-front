@@ -9,7 +9,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import TimeLineExample from "./Pages/TimeLineExample";
 import Header from "./header/Header";
-
+import HashtagPage from "./hashtag/HashtagPage"
 
 export default function App() {
   const [refresh,setRefresh]=useState(false) 
@@ -20,13 +20,12 @@ export default function App() {
            <BrowserRouter>
            <UserContext.Provider value={{refresh,setRefresh}}>
             <Routes>
-               
                <Route path="/" element={<SignIn />} />
                <Route path="/sign-up" element={<SignUp />} />
                <Route path="/home" element={<Header/>} />
+               <Route path="/hashtag/:hashtag" element={<HashtagPage />} />  
                <Route path="/timeline" element={<Timeline/>}/>
-               <Route path="/hashtag" element={<Trending />} />
-              
+                            
             </Routes>
             </UserContext.Provider>
          </BrowserRouter>

@@ -1,8 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 import styled from "styled-components";
+import React from "react";
+
 
 export default function HeaderLogout() {
     const [showLogout, setShowLogout] = useState(false);
@@ -48,6 +49,7 @@ const Header = styled.div`
     position: fixed;
     top: 0;
     z-index: 1;
+    
 `;
 
 const Logo = styled.div`

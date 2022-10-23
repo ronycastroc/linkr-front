@@ -36,8 +36,8 @@ function getPublications() {
   return promise;
 }
 function getHashtagTrending() {
-  //const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/trending`);
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/trending`, config);
   return promise;
 }
 
@@ -79,6 +79,12 @@ function getLikesInfo(postId) {
   return promise;
 }
 
+function getHashtagPosts(hashtagName){
+  const config = createHeaders();
+  const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`,config);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -91,4 +97,6 @@ export {
   getLikes,
   getUserLikes,
   getLikesInfo,
+  getHashtagPosts,
 };
+ 
