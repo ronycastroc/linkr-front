@@ -49,6 +49,7 @@ function Publication({
 function EditPublication({
   id,
   name,
+  newText,
   image,
   placeholder,
   url,
@@ -56,6 +57,10 @@ function EditPublication({
   title,
   description,
   inputRef,
+  handleCancelEdit,
+  handleKeyDown,
+  setNewText,
+  disabled,
 }) {
   return (
     <PublicationDiv>
@@ -68,7 +73,7 @@ function EditPublication({
         </WrapperPublication>
         <WrapperPublication>
           <Icons>
-            <TiPencil color="white" onClick={() => handleEditClick(id)} />
+            <TiPencil color="white" onClick={() => handleCancelEdit()} />
             <ModalDelete postId={id} />
           </Icons>
           <h1>{name}</h1>
@@ -76,7 +81,11 @@ function EditPublication({
             type="text"
             placeholder={placeholder}
             name="newText"
+            value={newText}
             ref={inputRef}
+            onKeyDown={(e) => handleKeyDown(e, id)}
+            onChange={(e) => setNewText(e.target.value)}
+            disabled={disabled}
           ></InputNewText>
           <Snippet
             url={url}
@@ -260,7 +269,7 @@ const InputNewText = styled.input`
   font-weight: 500;
   font-size: 15px;
   line-height: 18px;
-  color: #949494;
+  color: #4d4d4d;
   margin-bottom: 5px;
   text-align: initial;
 `;

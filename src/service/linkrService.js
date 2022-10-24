@@ -87,11 +87,7 @@ function getHashtagPosts(hashtagName) {
 
 function editPost(postId, body) {
   const config = createHeaders();
-  const promise = axios.put(
-    `${BASE_URL}/timeline/${postId.postId}`,
-    body,
-    config
-  );
+  const promise = axios.put(`${BASE_URL}/timeline/${postId}`, body, config);
   return promise;
 }
 
