@@ -10,24 +10,21 @@ import { getHashtagPosts } from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext";
 import HeaderLogout from "../authComponents/HeaderLogout";
 
-
 export default function HashtagPage() {
   const { hashtag } = useParams();
   const [publications, setPublications] = useState([]);
   const { refresh, setRefresh } = useContext(UserContext);
   const navigate = useNavigate();
- 
-  useEffect(() => {
-    setPublications()
-    getHashtag(hashtag); 
 
+  useEffect(() => {
+    setPublications();
+    getHashtag(hashtag);
   }, [refresh]);
 
   function getHashtag(tag) {
     getHashtagPosts(tag)
       .then((answer) => {
         setPublications(answer.data);
-        
       })
       .catch((error) => {
         alert(
@@ -37,47 +34,58 @@ export default function HashtagPage() {
   }
 
   function navigateToHashtagPage(tag) {
-    getHashtag(tag)
+    getHashtag(tag);
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
     return;
   }
 
   return (
-     
     <Wrapper>
       <HeaderLogout></HeaderLogout>
-        <TW><Title data={`# ${hashtag}`} />
-</TW>      <WrapperH>
-      {refresh === false ?(  
-        <WrapperContent>
-    {publications ? (
-            publications.map((value, key) => (
+      <TW>
+        <Title data={`# ${hashtag}`} />
+      </TW>{" "}
+      <WrapperH>
+        {refresh === false ? (
+          <WrapperContent>
+            {publications ? (
+              publications.map((value, key) => (
                 <PubWrapper>
                   <Publication
                     key={key}
                     id={value.id}
-                    text={<ReactTagify colors="white" tagClicked={(tag) => navigate(`/hashtag/${tag}`)} >{value.text}</ReactTagify>}
+                    text={
+                      <ReactTagify
+                        colors="white"
+                        tagClicked={(tag) => navigate(`/hashtag/${tag}`)}
+                      >
+                        {value.text}
+                      </ReactTagify>
+                    }
                     url={value.url}
                     description={value.description}
                     image={value.image}
-                    title={value.title}   
+                    title={value.title}
                     urlImage={value.urlImage}
                     name={value.name}
-                    ></Publication>
-                 </PubWrapper>
-                    ))
-                    )
-               : (
-                      <Title>
-                      <h1>Loading...</h1>
-                      </Title>
-                      )} 
-        </WrapperContent>
-                      ): <></>}
-        <WT><Trending onClick={(tag) => navigateToHashtagPage(tag)}/></WT>
+                  ></Publication>
+                </PubWrapper>
+              ))
+            ) : (
+              <Title>
+                <h1>Loading...</h1>
+              </Title>
+            )}
+          </WrapperContent>
+        ) : (
+          <></>
+        )}
+        <WT>
+          <Trending onClick={(tag) => navigateToHashtagPage(tag)} />
+        </WT>
       </WrapperH>
-    </Wrapper> 
+    </Wrapper>
   );
 }
 
@@ -87,47 +95,63 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  
-  @media (max-width: 414px) {
+
+  @media (max-width: 650px) {
     * {
       box-sizing: border-box;
     }
 
-    flex-wrap:wrap ;
-     justify-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  
- `;
+`;
 
- const TW = styled.div`
+const TW = styled.div`
   position: fixed;
-  top:15%;
+  top: 15%;
   right: 0%;
   width: 100%;
- `
- 
- const WT= styled.span`
- margin-top: -10px;
- @media (max-width: 414px) {
+  height: 10%;
+
+  @media (max-width: 650px) {
     * {
       box-sizing: border-box;
     }
-  display: none;
+    display: flex;
+    width: 100%;
+    position: relative;
+    top: 80px;
   }
- `
- const WrapperContent = styled.div`
- width: 100%;
+`;
+
+const WT = styled.span`
+ margin-top: 5px;
+  @media (max-width: 650px) {
+    * {
+      box-sizing: border-box;
+    }
+    display: none;
+  }
+`;
+const WrapperContent = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
  margin-top: 30px;
+ 
  @media (max-width: 650px) {
-    margin-top: 100px;
+    margin-top: 10px;
   }
-  `
+  top: 200px;
+  display: flex;
+  flex-direction: column;
+ 
+`;
 
 const WrapperH = styled.div`
   display: flex;
 `;
 
 const PubWrapper = styled.div`
-  position: relative;
-  top: 40%;
+  margin-top: -20px;
 `;
