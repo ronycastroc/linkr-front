@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { postPublication } from "../../service/linkrService";
 import ModalDelete from "./DeleteModal.js";
 import Like from "./LikePublication.js";
-
+import { TiPencil } from "react-icons/ti";
 function Publication({
   id,
   name,
@@ -16,6 +16,7 @@ function Publication({
   urlImage,
   title,
   description,
+  handleEditClick,
 }) {
   return (
     <PublicationDiv>
@@ -28,10 +29,55 @@ function Publication({
         </WrapperPublication>
         <WrapperPublication>
           <Icons>
+            <TiPencil color="white" onClick={() => handleEditClick(id)} />
             <ModalDelete postId={id} />
           </Icons>
           <h1>{name}</h1>
           <p>{text}</p>
+          <Snippet
+            url={url}
+            description={description}
+            title={title}
+            image={image}
+          ></Snippet>
+        </WrapperPublication>
+      </WrapperH>
+    </PublicationDiv>
+  );
+}
+
+function EditPublication({
+  id,
+  name,
+  image,
+  placeholder,
+  url,
+  urlImage,
+  title,
+  description,
+  inputRef,
+}) {
+  return (
+    <PublicationDiv>
+      <WrapperH>
+        <WrapperPublication>
+          <img src={urlImage} />
+          <LikeDiv>
+            <Like postId={id} />
+          </LikeDiv>
+        </WrapperPublication>
+        <WrapperPublication>
+          <Icons>
+            <TiPencil color="white" onClick={() => handleEditClick(id)} />
+            <ModalDelete postId={id} />
+          </Icons>
+          <h1>{name}</h1>
+          <InputNewText
+            type="text"
+            placeholder={placeholder}
+            name="newText"
+            ref={inputRef}
+          ></InputNewText>
           <Snippet
             url={url}
             description={description}
@@ -102,7 +148,7 @@ function AddPublication() {
     </AddPublicationDiv>
   );
 }
-export { Publication, AddPublication };
+export { Publication, AddPublication, EditPublication };
 
 const WrapperPublication = styled.div`
   display: flex;
@@ -188,7 +234,8 @@ const WrapperForm = styled.form`
 const Icons = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 40px;
   position: absolute;
   right: 0;
 `;
@@ -200,4 +247,20 @@ const LikeDiv = styled.div`
   justify-content: center;
   margin-top: 25px;
   cursor: pointer;
+`;
+
+const InputNewText = styled.input`
+  width: 503px;
+  height: 30px;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 0;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  color: #949494;
+  margin-bottom: 5px;
+  text-align: initial;
 `;
