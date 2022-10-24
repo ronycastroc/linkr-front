@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { postPublication } from "../../service/linkrService";
 import ModalDelete from "./DeleteModal.js";
 import Like from "./LikePublication.js";
-
+import { TiPencil } from "react-icons/ti";
 function Publication({
   id,
   name,
@@ -16,6 +16,7 @@ function Publication({
   urlImage,
   title,
   description,
+  handleEditClick,
 }) {
   return (
     <PublicationDiv>
@@ -28,10 +29,64 @@ function Publication({
         </WrapperPublicationProfile>
         <WrapperPublication>
           <Icons>
+            <TiPencil color="white" onClick={() => handleEditClick(id)} />
             <ModalDelete postId={id} />
           </Icons>
           <h1>{name}</h1>
           <p>{text}</p>
+          <Snippet
+            url={url}
+            description={description}
+            title={title}
+            image={image}
+          ></Snippet>
+        </WrapperPublication>
+      </WrapperH>
+    </PublicationDiv>
+  );
+}
+
+function EditPublication({
+  id,
+  name,
+  newText,
+  image,
+  placeholder,
+  url,
+  urlImage,
+  title,
+  description,
+  inputRef,
+  handleCancelEdit,
+  handleKeyDown,
+  setNewText,
+  disabled,
+}) {
+  return (
+    <PublicationDiv>
+      <WrapperH>
+        <WrapperPublication>
+          <img src={urlImage} />
+          <LikeDiv>
+            <Like postId={id} />
+          </LikeDiv>
+        </WrapperPublication>
+        <WrapperPublication>
+          <Icons>
+            <TiPencil color="white" onClick={() => handleCancelEdit()} />
+            <ModalDelete postId={id} />
+          </Icons>
+          <h1>{name}</h1>
+          <InputNewText
+            type="text"
+            placeholder={placeholder}
+            name="newText"
+            value={newText}
+            ref={inputRef}
+            onKeyDown={(e) => handleKeyDown(e, id)}
+            onChange={(e) => setNewText(e.target.value)}
+            disabled={disabled}
+          ></InputNewText>
           <Snippet
             url={url}
             description={description}
@@ -94,22 +149,22 @@ function AddPublication() {
             type="text"
             onChange={(e) => setText(e.target.value)}
           ></InputText>
-          
+
           <ButtonW>
-          <Button disabled={disabled} type="submit">
-            {button}
-          </Button>
+            <Button disabled={disabled} type="submit">
+              {button}
+            </Button>
           </ButtonW>
         </WrapperPublication>
       </WrapperForm>
     </AddPublicationDiv>
   );
 }
-export { Publication, AddPublication };
-const ButtonW=styled.div`
-display: flex;
-justify-content: end;
-`
+export { Publication, AddPublication, EditPublication };
+const ButtonW = styled.div`
+  display: flex;
+  justify-content: end;
+`;
 const WrapperPublication = styled.div`
   width: 100%;
   display: flex;
@@ -137,18 +192,15 @@ const WrapperPublication = styled.div`
 `;
 
 const WrapperPublicationProfile = styled.div`
- padding-left: 20px;
- 
-
-`
+  padding-left: 20px;
+`;
 
 const WrapperAddPublication = styled.div`
- padding-left: 20px;
- @media (max-width: 650px) {
+  padding-left: 20px;
+  @media (max-width: 650px) {
     display: none;
   }
-
-`
+`;
 const PublicationDiv = styled.div`
   width: 611px;
   background: #171717;
@@ -166,7 +218,8 @@ const PublicationDiv = styled.div`
   }
   @media (max-width: 650px) {
     width: 100vw;
-    border-radius:0;}
+    border-radius: 0;
+  }
 `;
 
 const AddPublicationDiv = styled(PublicationDiv)`
@@ -198,7 +251,6 @@ const InputLink = styled.input`
   color: #949494;
   margin-bottom: 5px;
   text-align: initial;
-  
 `;
 const InputText = styled(InputLink)`
   min-height: 66px;
@@ -213,7 +265,8 @@ const WrapperForm = styled.form`
 const Icons = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 40px;
   position: absolute;
   right: 0;
 `;
@@ -225,4 +278,20 @@ const LikeDiv = styled.div`
   justify-content: center;
   margin-top: 25px;
   cursor: pointer;
+`;
+
+const InputNewText = styled.input`
+  width: 503px;
+  height: 30px;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 0;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  color: #4d4d4d;
+  margin-bottom: 5px;
+  text-align: initial;
 `;
