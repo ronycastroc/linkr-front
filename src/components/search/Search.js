@@ -159,6 +159,9 @@ const StyledHeader = styled.div`
             left: 0;
         }
     }
+    @media (max-width: 650px) {
+    display: none;
+  }
 `
 
 

@@ -90,5 +90,10 @@ const WrapperH = styled.div`
     font-size: 43px;
     line-height: 64px;
     color: #FFFFFF;
+
+    @media (max-width: 650px) {
+        margin-left: 5%;
+    }
+
     }
  `
