@@ -49,6 +49,7 @@ const HashtagsBox = styled.div`
   height: 406px;
   background-color: #171717;
   border-radius: 16px;
+  margin-top: 43px;
 
   h3 {
     font-family: "Oswald";
@@ -78,4 +79,9 @@ const HashtagsBox = styled.div`
 
     color: #ffffff;
   }
+  @media (max-width: 650px) {
+   display: none;
+  }
+
+
 `;

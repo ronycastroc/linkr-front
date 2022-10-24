@@ -21,8 +21,8 @@ export { Snippet };
 
 const SnippetDiv = styled.div`
   display: flex;
-  width: 503px;
-  height: 155px;
+  width: 100%;
+  min-height: 155px;
   border: 1px solid #4d4d4d;
   border-radius: 11px;
   position: relative;
@@ -32,7 +32,7 @@ const WrapperSnippetText = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 349.56px;
+  width:70%;
   padding: 20px;
   justify-content: space-between;
   h1 {
@@ -62,17 +62,32 @@ const WrapperSnippetText = styled.div`
     color: #cecece;
     width: 100%;
   }
+  @media (max-width: 650px) {
+  h1{
+    font-size: 11px;
+  }
+  h2{
+    font-size: 9px;
+
+  }
+  h3{
+    font-size: 9px;
+
+  }
+  }
 `;
 const WrapperSnippetImg = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  img {
-    position: absolute;
-    top: 0;
+  width: 30%;
+  height: 100%;
+  position: absolute;
+  top: 0;
     right: 0;
-    width: 154px !important;
-    height: 154px !important;
+  img {
+    width: 100% !important;
+    height: 100% !important;
     border-radius: 0px 11px 11px 0px !important;
   }
 `;

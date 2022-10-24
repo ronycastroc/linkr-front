@@ -21,12 +21,12 @@ function Publication({
   return (
     <PublicationDiv>
       <WrapperH>
-        <WrapperPublication>
+        <WrapperPublicationProfile>
           <img src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
           </LikeDiv>
-        </WrapperPublication>
+        </WrapperPublicationProfile>
         <WrapperPublication>
           <Icons>
             <TiPencil color="white" onClick={() => handleEditClick(id)} />
@@ -129,9 +129,9 @@ function AddPublication() {
   return (
     <AddPublicationDiv>
       <WrapperForm onSubmit={createPost}>
-        <WrapperPublication>
+        <WrapperAddPublication>
           <img src={userImage} alt="userImg"></img>
-        </WrapperPublication>
+        </WrapperAddPublication>
         <WrapperPublication>
           <h1>What are you going to share today?</h1>
           <InputLink
@@ -149,17 +149,24 @@ function AddPublication() {
             type="text"
             onChange={(e) => setText(e.target.value)}
           ></InputText>
-          <Button disabled={disabled} type="submit">
-            {button}
-          </Button>
+
+          <ButtonW>
+            <Button disabled={disabled} type="submit">
+              {button}
+            </Button>
+          </ButtonW>
         </WrapperPublication>
       </WrapperForm>
     </AddPublicationDiv>
   );
 }
 export { Publication, AddPublication, EditPublication };
-
+const ButtonW = styled.div`
+  display: flex;
+  justify-content: end;
+`;
 const WrapperPublication = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -183,6 +190,17 @@ const WrapperPublication = styled.div`
     color: #b7b7b7;
   }
 `;
+
+const WrapperPublicationProfile = styled.div`
+  padding-left: 20px;
+`;
+
+const WrapperAddPublication = styled.div`
+  padding-left: 20px;
+  @media (max-width: 650px) {
+    display: none;
+  }
+`;
 const PublicationDiv = styled.div`
   width: 611px;
   background: #171717;
@@ -197,6 +215,10 @@ const PublicationDiv = styled.div`
     height: 50px;
     border-radius: 26.5px;
     display: block;
+  }
+  @media (max-width: 650px) {
+    width: 100vw;
+    border-radius: 0;
   }
 `;
 
@@ -216,7 +238,7 @@ const AddPublicationDiv = styled(PublicationDiv)`
 `;
 
 const InputLink = styled.input`
-  width: 503px;
+  width: 100%;
   height: 30px;
   background: #efefef;
   border-radius: 5px;

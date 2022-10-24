@@ -186,5 +186,9 @@ const Title = styled.div`
     font-size: 43px;
     line-height: 64px;
     color: #ffffff;
+
+    @media (max-width: 650px) {
+      margin-left: 5%;
+    }
   }
 `;
