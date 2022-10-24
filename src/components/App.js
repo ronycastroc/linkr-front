@@ -7,12 +7,10 @@ import UserContext from "../contexts/Usercontext.js";
 import { useState } from "react";
 import SignIn from "./authPages/SignIn";
 import SignUp from "./authPages/SignUp";
-import TimeLineExample from "./authPages/TimeLineExample";
-import Header from "./search/Search";
-
+import HashtagPage from "./hashtag/HashtagPage"
 
 export default function App() {
-  const [refresh,setRefresh]=useState(false) 
+  const [refresh,setRefresh]=useState(false)
   
   return (
       <>
@@ -20,13 +18,11 @@ export default function App() {
            <BrowserRouter>
            <UserContext.Provider value={{refresh,setRefresh}}>
             <Routes>
-               
                <Route path="/" element={<SignIn />} />
                <Route path="/sign-up" element={<SignUp />} />
-               <Route path="/home" element={<Header/>} />
+               <Route path="/hashtag/:hashtag" element={<HashtagPage />} />  
                <Route path="/timeline" element={<Timeline/>}/>
-               <Route path="/hashtag" element={<Trending />} />
-              
+                            
             </Routes>
             </UserContext.Provider>
          </BrowserRouter>

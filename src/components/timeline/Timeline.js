@@ -4,12 +4,18 @@ import {getPublications } from "../../service/linkrService";
 import {Publication,AddPublication} from "./Publication.js"
 import UserContext from "../../contexts/Usercontext.js";
 import HeaderLogout from "../HeaderLogout";
+import { ReactTagify } from "react-tagify";
+import Trending from "../hashtag/Trending";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function Timeline(){
     const [publications,setPublications]=useState('');
-    const {refresh}=useContext(UserContext)
-    
+    const {refresh}=useContext(UserContext);
+    const navigate = useNavigate();
+
+
     useEffect(()=>{
         getPublications()
          .then((answer)=>{
@@ -19,14 +25,21 @@ export default function Timeline(){
          .catch((error)=>{
             alert("An error occured while trying to fetch the posts, please refresh the page")
          })
-         //Tem um Wrapper vazio que talvez funcione pra colocar a tabela de hashtags
-
+         
     },[refresh]);
+
+    function navigateToHashtagPage(tag){
+        const hashtag = tag.replace("#","");
+        navigate(`/hashtag/${hashtag}`);
+        return 
+    }   
+
     return(
         <Wrapper>
+            <HeaderLogout />
+
              <WrapperH>
-                <Wrapper>
-                    <HeaderLogout />
+                <Wrapper>                
 
                     <Title><h1>Timeline</h1></Title>
                     <AddPublication></AddPublication>
@@ -35,7 +48,7 @@ export default function Timeline(){
                             <Publication 
                                 key={key}
                                 id={value.id}
-                                text={value.text}
+                                text={<ReactTagify colors="white" tagClicked={(tag)=>(navigateToHashtagPage(tag) )}  >{value.text}</ReactTagify>}
                                 url={value.url}
                                 description={value.description}
                                 image={value.image}
@@ -44,9 +57,9 @@ export default function Timeline(){
                                 name={value.name}
                             ></Publication>
                         )
-
                     )):(<Title><h1>Loading...</h1></Title>)}
                 </Wrapper>
+                        <Trending onClick={(tag)=> navigateToHashtagPage(tag)}></Trending>
                 <Wrapper>
                 
                 </Wrapper>

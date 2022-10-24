@@ -1,12 +1,13 @@
-import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 import Search from "./search/Search";
 import styled from "styled-components";
+import React from "react";
+
 
 export default function HeaderLogout() {
-    const [showLogout, setShowLogout] = useState(false);
+    const [showLogout, setShowLogout] = useState(false);    
 
     const navigate = useNavigate();
 
@@ -18,13 +19,13 @@ export default function HeaderLogout() {
     };
 
     return (
-        <>        
+        <>      
+            <Search />
+
             <Header>
                 <Logo>
                     <h1>linkr</h1>
                 </Logo>
-
-                <Search />
 
                 <ProfileLogout onClick={() => setShowLogout(!showLogout)}>
                     {showLogout ? 
@@ -52,6 +53,7 @@ const Header = styled.div`
     position: fixed;
     top: 0;
     z-index: 1;
+    
 `;
 
 const Logo = styled.div`
@@ -105,7 +107,9 @@ const LogoutBar = styled.div`
     border-bottom-left-radius: 20px;
     position: fixed;
     transform: ${(props) => (props.showLogout ? "translateY(0)" : "translateY(-72px)")};
-    transition: all 0.5s ease-out;
+    opacity: ${(props) => (props.showLogout ? "1" : "0")};
+    transition: all 0.3s ease-out;
+    
     cursor: pointer;
 
     p {

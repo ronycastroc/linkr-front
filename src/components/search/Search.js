@@ -62,9 +62,15 @@ const StyledHeader = styled.div`
     max-width: 563px;
     min-height: 45px;
     margin: 0 auto;
+    background: #E7E7E7;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    position: fixed;
+    left: 50%;
+    top: 13px;
+    transform: translate(-50%);
+    z-index: 2;
     
 
     form {
