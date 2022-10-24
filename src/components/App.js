@@ -9,6 +9,7 @@ import SignIn from "./authComponents/SignIn";
 import SignUp from "./authComponents/SignUp";
 import HashtagPage from "./hashtag/HashtagPage"
 import Overlay from "./authComponents/Overlay";
+import PrivatePage from "../PrivatePage.js";
 
 export default function App() {
    const [refresh, setRefresh] = useState(false)
@@ -17,14 +18,14 @@ export default function App() {
    return (
       <>
          <GlobalStyle />
-         <Overlay showLogout={showLogout} setShowLogout={setShowLogout}/>
          <BrowserRouter>
+            <Overlay showLogout={showLogout} setShowLogout={setShowLogout} />
             <UserContext.Provider value={{ refresh, setRefresh, showLogout, setShowLogout }}>
                <Routes>
                   <Route path="/" element={<SignIn />} />
                   <Route path="/sign-up" element={<SignUp />} />
-                  <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
-                  <Route path="/timeline" element={<Timeline />} />
+                  <Route path="/hashtag/:hashtag" element={<PrivatePage><HashtagPage /></PrivatePage>} />
+                  <Route path="/timeline" element={<PrivatePage><Timeline /></PrivatePage>} />
                </Routes>
             </UserContext.Provider>
          </BrowserRouter>
