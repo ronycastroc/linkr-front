@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postSignIn } from "../../service/linkrService";
-import LogoBox from "../LogoBox";
+import LogoBox from "./LogoBox";
 import styled from "styled-components";
 import React from "react";
 
@@ -33,19 +33,19 @@ export default function SignIn() {
       .catch((res) => {         
          if(res.message === "Network Error") {
             resetForm();  
-            alert(`Erro ao enviar requisição, tente novamente mais tarde. (${res.message})`);
+            alert(`Error submitting request, please try again later. (${res.message})`);
             setDisabledInput(false);
             return;
          }
 
          if(res.response.status === 401) {
             resetForm();            
-            alert(`Seu email ou senha estão incorretos, digite novamente. (${res.response.status} - ${res.response.data})`);
+            alert(`Your email or password is incorrect, please enter again. (${res.response.status} - ${res.response.data})`);
             setDisabledInput(false);
             return;
          }
          resetForm();         
-         alert(`Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`);
+         alert(`Something went wrong, try again. (${res.response.status} - ${res.response.data})`);
          setDisabledInput(false);
       })
    };

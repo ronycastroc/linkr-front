@@ -11,6 +11,4 @@ export default function PrivatePage ({children}){
         else{
             return <Navigate to='/'/>
         }
-    
-
-}
+};

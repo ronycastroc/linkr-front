@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { editPost, getPublications } from "../../service/linkrService";
 import { Publication, AddPublication, EditPublication } from "./Publication.js";
 import UserContext from "../../contexts/Usercontext.js";
-import HeaderLogout from "../HeaderLogout";
+import HeaderLogout from "../authComponents/HeaderLogout";
 import { ReactTagify } from "react-tagify";
 import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";

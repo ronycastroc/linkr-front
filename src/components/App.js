@@ -5,29 +5,33 @@ import Timeline from "./timeline/Timeline.js";
 import Trending from "./hashtag/Trending";
 import UserContext from "../contexts/Usercontext.js";
 import { useState } from "react";
-import SignIn from "./authPages/SignIn";
-import SignUp from "./authPages/SignUp";
+import SignIn from "./authComponents/SignIn";
+import SignUp from "./authComponents/SignUp";
 import HashtagPage from "./hashtag/HashtagPage"
+import Overlay from "./authComponents/Overlay";
 import PrivatePage from "../PrivatePage.js";
 
 export default function App() {
-  const [refresh,setRefresh]=useState(false)
-  
-  return (
+   const [refresh, setRefresh] = useState(false)
+   const [showLogout, setShowLogout] = useState(false);
+
+   return (
       <>
          <GlobalStyle />
-           <BrowserRouter>
-           <UserContext.Provider value={{refresh,setRefresh}}>
-            <Routes>
-               <Route path="/" element={<SignIn />} />
-               <Route path="/sign-up" element={<SignUp />} />
-               <Route path="/hashtag/:hashtag" element={<PrivatePage><HashtagPage /></PrivatePage>} />  
-               <Route path="/timeline" element={<PrivatePage><Timeline/></PrivatePage>}/>
-                            
-            </Routes>
+         <BrowserRouter>
+            <Overlay showLogout={showLogout} setShowLogout={setShowLogout} />
+            <UserContext.Provider value={{ refresh, setRefresh, showLogout, setShowLogout }}>
+               <Routes>
+                  <Route path="/" element={<SignIn />} />
+                  <Route path="/sign-up" element={<SignUp />} />
+                  <Route path="/hashtag/:hashtag" element={<PrivatePage><HashtagPage /></PrivatePage>} />
+                  <Route path="/timeline" element={<PrivatePage><Timeline /></PrivatePage>} />
+               </Routes>
             </UserContext.Provider>
          </BrowserRouter>
       </>
    );
 };
+
+
 
