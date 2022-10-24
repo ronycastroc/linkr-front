@@ -7,6 +7,8 @@ import { postPublication } from "../../service/linkrService";
 import ModalDelete from "./DeleteModal.js";
 import Like from "./LikePublication.js";
 import { TiPencil } from "react-icons/ti";
+import { useNavigate } from "react-router-dom";
+
 function Publication({
   id,
   name,
@@ -17,12 +19,15 @@ function Publication({
   title,
   description,
   handleEditClick,
+  userId
 }) {
+
+  let navigate = useNavigate()
   return (
     <PublicationDiv>
       <WrapperH>
         <WrapperPublicationProfile>
-          <img src={urlImage} />
+          <img onClick={()=> navigate(`/user/${userId}`)} src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
           </LikeDiv>
@@ -32,7 +37,7 @@ function Publication({
             <TiPencil color="white" onClick={() => handleEditClick(id)} />
             <ModalDelete postId={id} />
           </Icons>
-          <h1>{name}</h1>
+          <h1 onClick={()=> navigate(`/user/${userId}`)}>{name}</h1>
           <p>{text}</p>
           <Snippet
             url={url}
@@ -180,6 +185,7 @@ const WrapperPublication = styled.div`
     font-size: 19px;
     line-height: 23px;
     color: #ffffff;
+    cursor: pointer;
   }
   p {
     font-family: "Lato";
@@ -193,6 +199,10 @@ const WrapperPublication = styled.div`
 
 const WrapperPublicationProfile = styled.div`
   padding-left: 20px;
+
+  img {
+    cursor: pointer;
+  }
 `;
 
 const WrapperAddPublication = styled.div`
