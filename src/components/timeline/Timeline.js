@@ -190,6 +190,7 @@ const Title = styled.div`
 
     @media (max-width: 650px) {
       margin-left: 5%;
+      margin-top: 50px;
     }
   }
 `;

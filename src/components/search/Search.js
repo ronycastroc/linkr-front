@@ -164,6 +164,7 @@ const StyledHeader = styled.div`
         }
     }
     @media (max-width: 650px) {
-    display: none;
+        top: 80px;
+        width: 90%;
   }
 `

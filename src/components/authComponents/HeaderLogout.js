@@ -6,7 +6,6 @@ import styled from "styled-components";
 import React from "react";
 import UserContext from "../../contexts/Usercontext";
 
-
 export default function HeaderLogout() {
     const { showLogout, setShowLogout } = useContext(UserContext);
 
@@ -88,8 +87,8 @@ const ProfileLogout = styled.div`
     cursor: pointer;
 
     img {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         border-radius: 100%;
         object-fit: cover;
     }
