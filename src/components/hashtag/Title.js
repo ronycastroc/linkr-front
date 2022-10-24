@@ -25,4 +25,10 @@ const TitleWrapper = styled.p`
   line-height: 64px;
 
   color: #ffffff;
+
+  @media (max-width: 650px) {
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%);
+  }
 `;

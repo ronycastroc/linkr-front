@@ -107,6 +107,7 @@ const Wrapper = styled.div`
  `
  
  const WT= styled.span`
+ margin-top: -10px;
  @media (max-width: 414px) {
     * {
       box-sizing: border-box;
@@ -115,7 +116,11 @@ const Wrapper = styled.div`
   }
  `
  const WrapperContent = styled.div`
- width: 100;
+ width: 100%;
+ margin-top: 30px;
+ @media (max-width: 650px) {
+    margin-top: 100px;
+  }
   `
 
 const WrapperH = styled.div`
