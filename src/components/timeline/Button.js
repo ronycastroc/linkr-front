@@ -21,6 +21,6 @@ const ButtonW = styled.button`
     font-size: 14px;
     line-height: 17px;
     color: #FFFFFF;
-    margin-left:391px;
-
+   
+    
 `;

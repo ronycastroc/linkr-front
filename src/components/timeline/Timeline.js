@@ -3,6 +3,7 @@ import styled from "styled-components"
 import {getPublications } from "../../service/linkrService";
 import {Publication,AddPublication} from "./Publication.js"
 import UserContext from "../../contexts/Usercontext.js";
+import HeaderLogout from "../HeaderLogout";
 import { ReactTagify } from "react-tagify";
 import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
@@ -35,8 +36,11 @@ export default function Timeline(){
 
     return(
         <Wrapper>
+            <HeaderLogout />
+
              <WrapperH>
-                <Wrapper>
+                <Wrapper>                
+
                     <Title><h1>Timeline</h1></Title>
                     <AddPublication></AddPublication>
                     {publications?(publications.length===0?(<Title><h1>There are no posts yet</h1></Title>):(
@@ -69,7 +73,6 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-   
 `;
 
 const WrapperH = styled.div`
@@ -78,7 +81,7 @@ const WrapperH = styled.div`
 `
  const Title=styled.div`
     width: 100%;
-    margin-top: 53px;
+    margin-top: 100px;
     margin-bottom:43px;
     h1{
     font-family: 'Oswald';
@@ -87,5 +90,10 @@ const WrapperH = styled.div`
     font-size: 43px;
     line-height: 64px;
     color: #FFFFFF;
+
+    @media (max-width: 650px) {
+        margin-left: 5%;
+    }
+
     }
  `

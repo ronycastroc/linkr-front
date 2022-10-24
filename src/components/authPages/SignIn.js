@@ -23,32 +23,32 @@ export default function SignIn() {
 
     postSignIn(body)
       .then((res) => {
-        resetForm();
-        setDisabledInput(false);
-        localStorage.setItem("perfilImage", JSON.stringify(res.data.urlImage));
-        localStorage.setItem("token", JSON.stringify(res.data.token));
-        localStorage.setItem("userId", JSON.stringify(res.data.userId));
-        localStorage.setItem("name", JSON.stringify(res.data.name));
-        console.log(res.data);
-
-        navigate("/timeline");
+         resetForm();
+         setDisabledInput(false);
+         localStorage.setItem("perfilImage", JSON.stringify(res.data.urlImage));
+         localStorage.setItem("token", JSON.stringify(res.data.token));
+         localStorage.setItem("userId", JSON.stringify(res.data.userId));
+         navigate("/timeline");
       })
-      .catch((res) => {
-        if (res.response.status === 401) {
-          resetForm();
-          alert(
-            `Seu email ou senha estão incorretos, digite novamente. (${res.response.status} - ${res.response.data})`
-          );
-          setDisabledInput(false);
-          return;
-        }
-        resetForm();
-        setDisabledInput(false);
-        alert(
-          `Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`
-        );
-      });
-  }
+      .catch((res) => {         
+         if(res.message === "Network Error") {
+            resetForm();  
+            alert(`Erro ao enviar requisição, tente novamente mais tarde. (${res.message})`);
+            setDisabledInput(false);
+            return;
+         }
+
+         if(res.response.status === 401) {
+            resetForm();            
+            alert(`Seu email ou senha estão incorretos, digite novamente. (${res.response.status} - ${res.response.data})`);
+            setDisabledInput(false);
+            return;
+         }
+         resetForm();         
+         alert(`Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`);
+         setDisabledInput(false);
+      })
+   };
 
   function resetForm() {
     setEmail("");
