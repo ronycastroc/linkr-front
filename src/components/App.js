@@ -10,6 +10,7 @@ import SignUp from "./authComponents/SignUp";
 import HashtagPage from "./hashtag/HashtagPage"
 import Overlay from "./authComponents/Overlay";
 import PrivatePage from "../PrivatePage.js";
+import TimelineUser from "./timeline/TimelineUser";
 
 export default function App() {
    const [refresh, setRefresh] = useState(false)
@@ -26,6 +27,7 @@ export default function App() {
                   <Route path="/sign-up" element={<SignUp />} />
                   <Route path="/hashtag/:hashtag" element={<PrivatePage><HashtagPage /></PrivatePage>} />
                   <Route path="/timeline" element={<PrivatePage><Timeline /></PrivatePage>} />
+                  <Route path="/user/:id" element={<TimelineUser/>} />
                </Routes>
             </UserContext.Provider>
          </BrowserRouter>

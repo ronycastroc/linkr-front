@@ -4,12 +4,14 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import {IoSearchOutline} from "react-icons/io5"
 import { IconContext } from "react-icons";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function Search(){
 
     const [ searchs, setSearch ] = useState([])
+    let navigate = useNavigate()
 
     async function SearchUsers(event){
         //event.preventDefault()
@@ -32,10 +34,12 @@ export default function Search(){
         <StyledHeader>
             <form onSubmit={SearchUsers}>
             <DebounceInput
-                
                 minLength={3}
                 debounceTimeout={300}
-                onChange={SearchUsers} />
+                onChange={SearchUsers} 
+                value={searchs.length === 0 ? "" : searchs.name}
+                />
+
                 <div className="search-icon">
                     <IconContext.Provider value={{ size: "21px", color: "#C6C6C6" }}>
                         <IoSearchOutline/>
@@ -48,7 +52,7 @@ export default function Search(){
                         const delay = `${idx + 1}00ms`
                         return (
                             <ul>
-                                <li key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
+                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
                             </ul>
                         )
                    })} 
@@ -163,7 +167,3 @@ const StyledHeader = styled.div`
     display: none;
   }
 `
-
-
-
-          //<input required type="text" id="seearch" placeholder="Procure por Pessoas" onChange={SearchUsers} /> 
