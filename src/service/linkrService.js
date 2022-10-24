@@ -79,9 +79,15 @@ function getLikesInfo(postId) {
   return promise;
 }
 
-function getHashtagPosts(hashtagName){
+function getHashtagPosts(hashtagName) {
   const config = createHeaders();
-  const promise=axios.get(`${BASE_URL}/hashtag/${hashtagName}`,config);
+  const promise = axios.get(`${BASE_URL}/hashtag/${hashtagName}`, config);
+  return promise;
+}
+
+function editPost(postId, body) {
+  const config = createHeaders();
+  const promise = axios.put(`${BASE_URL}/timeline/${postId}`, body, config);
   return promise;
 }
 
@@ -98,5 +104,5 @@ export {
   getUserLikes,
   getLikesInfo,
   getHashtagPosts,
+  editPost,
 };
- 
