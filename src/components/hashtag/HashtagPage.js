@@ -8,7 +8,7 @@ import { Publication } from "../timeline/Publication";
 import { ReactTagify } from "react-tagify";
 import { getHashtagPosts } from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext";
-import HeaderLogout from "../HeaderLogout";
+import HeaderLogout from "../authComponents/HeaderLogout";
 
 
 export default function HashtagPage() {

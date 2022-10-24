@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postSignUp } from "../../service/linkrService";
 import { AuthBox, FormContent, Button } from "./SignIn";
-import LogoBox from "../LogoBox";
+import LogoBox from "./LogoBox";
 import styled from "styled-components";
 import React from "react";
 
@@ -31,7 +31,7 @@ export default function SignUp() {
       if(password !== confirmPassword) {
          setPassword("");
          setConfirmPassword("");
-         alert("Senhas não confere, digite novamente!");
+         alert("Passwords do not match, enter again.");
          setDisabledInput(false);
          return;
       }
@@ -39,7 +39,7 @@ export default function SignUp() {
       if(password.length < 6) {
          setPassword("");
          setConfirmPassword("");
-         alert("Senha deve ter 6 digitos ou mais!");
+         alert("Password must be 6 digits or more.");
          setDisabledInput(false);
          return;
       }
@@ -53,20 +53,20 @@ export default function SignUp() {
       .catch((res) => {
          if(res.message === "Network Error") {
             resetForm();  
-            alert(`Erro ao enviar requisição, tente novamente mais tarde. (${res.message})`);
+            alert(`Error submitting request, please try again later. (${res.message})`);
             setDisabledInput(false);
             return;
          }
 
          if(res.response.status === 409) {
             setEmail("");            
-            alert(`Email já cadastrado, digite outro email. (${res.response.status} - ${res.response.data})`);
+            alert(`Email already registered, enter another email. (${res.response.status} - ${res.response.data})`);
             setDisabledInput(false);
             return;
          }
          
          resetForm();                
-         alert(`Algo deu errado, tente novamente. (${res.response.status} - ${res.response.data})`);
+         alert(`Something went wrong, try again. (${res.response.status} - ${res.response.data})`);
          setDisabledInput(false);  
       })
    }

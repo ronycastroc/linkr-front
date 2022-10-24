@@ -70,7 +70,7 @@ const StyledHeader = styled.div`
     left: 50%;
     top: 13px;
     transform: translate(-50%);
-    z-index: 2;
+    z-index: 5;
     
 
     form {

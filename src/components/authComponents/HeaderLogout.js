@@ -1,37 +1,39 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
-import Search from "./search/Search";
+import Search from "../search/Search";
 import styled from "styled-components";
 import React from "react";
+import UserContext from "../../contexts/Usercontext";
 
 
 export default function HeaderLogout() {
-    const [showLogout, setShowLogout] = useState(false);    
+    const { showLogout, setShowLogout } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const perfilImage = JSON.parse(localStorage.getItem("perfilImage"));
 
     function logout() {
+        setShowLogout(false)
         localStorage.clear();
         navigate("/");
     };
 
     return (
-        <>      
+        <>
             <Search />
 
             <Header>
-                <Logo>
+                <Logo onClick={() => navigate("/timeline")}>
                     <h1>linkr</h1>
                 </Logo>
 
                 <ProfileLogout onClick={() => setShowLogout(!showLogout)}>
-                    {showLogout ? 
-                    (<IoChevronUpOutline className="io-up-down"/>) : 
-                    (<IoChevronDownOutline className="io-up-down"/>)}
-                    
+                    {showLogout ?
+                        (<IoChevronUpOutline className="io-up-down" />) :
+                        (<IoChevronDownOutline className="io-up-down" />)}
+
                     <img src={perfilImage} alt="profile" />
                 </ProfileLogout>
             </Header>
@@ -52,7 +54,7 @@ const Header = styled.div`
     align-items: center;
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 4;
     
 `;
 
@@ -62,14 +64,19 @@ const Logo = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;       
 
-    h1 {
+    h1 {        
         font-size: 3rem;
         color: #FFFFFF;
         font-weight: 700;
         font-family: 'Passion One', cursive;
+        transition: font-size 0.2s linear;
 
-    }
+        &:hover{
+            font-size: 3.3rem;        
+        }
+    }    
 `;
 
 const ProfileLogout = styled.div`
@@ -109,7 +116,7 @@ const LogoutBar = styled.div`
     transform: ${(props) => (props.showLogout ? "translateY(0)" : "translateY(-72px)")};
     opacity: ${(props) => (props.showLogout ? "1" : "0")};
     transition: all 0.3s ease-out;
-    
+    z-index: 3;    
     cursor: pointer;
 
     p {
@@ -118,3 +125,4 @@ const LogoutBar = styled.div`
         font-size: 1rem;
     }
 `;
+
