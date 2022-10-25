@@ -8,6 +8,7 @@ import ModalDelete from "./DeleteModal.js";
 import Like from "./LikePublication.js";
 import { TiPencil } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
+import ModalRepost from "./RepostModal.js";
 
 function Publication({
   id,
@@ -19,17 +20,17 @@ function Publication({
   title,
   description,
   handleEditClick,
-  userId
+  userId,
 }) {
-
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   return (
     <PublicationDiv>
       <WrapperH>
         <WrapperPublicationProfile>
-          <img onClick={()=> navigate(`/user/${userId}`)} src={urlImage} />
+          <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
+            <ModalRepost postId={id} />
           </LikeDiv>
         </WrapperPublicationProfile>
         <WrapperPublication>
@@ -37,7 +38,7 @@ function Publication({
             <TiPencil color="white" onClick={() => handleEditClick(id)} />
             <ModalDelete postId={id} />
           </Icons>
-          <h1 onClick={()=> navigate(`/user/${userId}`)}>{name}</h1>
+          <h1 onClick={() => navigate(`/user/${userId}`)}>{name}</h1>
           <p>{text}</p>
           <Snippet
             url={url}
