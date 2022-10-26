@@ -133,6 +133,7 @@ export default function Timeline() {
                 ) : (
                   <Publication
                     key={key}
+                    userId={value.userId}
                     id={value.id}
                     text={
                       <ReactTagify

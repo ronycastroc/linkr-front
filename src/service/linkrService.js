@@ -2,7 +2,7 @@ import axios from "axios";
 
 /* const BASE_URL = "https://project-linkr-back.herokuapp.com"; */
 
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "http://localhost:4000"; 
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -91,6 +91,40 @@ function editPost(postId, body) {
   return promise;
 }
 
+function getTimeline(id) {
+  const promise = axios.post(`${BASE_URL}/user/${id}`, {});
+  return promise;
+}
+
+function searchUser(value){
+  const promise = axios.get(`${BASE_URL}/users?filter=${value}`);
+  return promise;
+}
+
+function getFollowers() {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/followers`, config);
+  return promise;
+}
+
+function getFollower(id) {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/follower/${id}`, config);
+  return promise;
+}
+
+function followUser(id) {
+  const config = createHeaders();
+  const promise = axios.post(`${BASE_URL}/follow/${id}`, {}, config);
+  return promise;
+}
+
+function unfollowUser(id) {
+  const config = createHeaders();
+  const promise = axios.delete(`${BASE_URL}/unfollow/${id}`, config);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -105,4 +139,10 @@ export {
   getLikesInfo,
   getHashtagPosts,
   editPost,
+  getTimeline,
+  searchUser,
+  getFollowers,
+  getFollower,
+  followUser,
+  unfollowUser
 };

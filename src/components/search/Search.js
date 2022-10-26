@@ -5,8 +5,7 @@ import styled from "styled-components"
 import {IoSearchOutline} from "react-icons/io5"
 import { IconContext } from "react-icons";
 import { useNavigate } from "react-router-dom";
-
-
+import { searchUser } from "../../service/linkrService";
 
 export default function Search(){
 
@@ -22,8 +21,9 @@ export default function Search(){
         }
 
         try{
-            const resp = await axios.get(`http://localhost:4000/users?filter=${value}`);
-        setSearch(resp.data)
+           const resp = await searchUser(value)
+           //console.log(resp)
+            setSearch(resp.data)
         }catch {
           console.log("deu ruim na requisição")
         }
