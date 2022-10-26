@@ -26,7 +26,8 @@ export default function TimelineUser() {
 
     useEffect(() => {
         getTimelineUser()
-    }, [posts]);
+        .then(() => setRefresh(!refresh))
+    }, [refresh]);
 
     function followUnfollow() {
         setRefresh(!refresh);

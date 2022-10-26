@@ -98,7 +98,6 @@ function getTimeline(id) {
 
 function searchUser(value){
   const userid = localStorage.getItem("userId")
-  console.log(userid)
   const promise = axios.get(`${BASE_URL}/users?filter=${value}&&userId=${userid}`);
   return promise;
 }
