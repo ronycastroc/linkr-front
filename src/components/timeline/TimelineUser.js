@@ -1,21 +1,20 @@
 import { useParams } from "react-router-dom"
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components"
 import { Publication } from "./Publication.js"
-import UserContext from "../../contexts/Usercontext.js";
-import axios from "axios";
 import HeaderLogout from "../authComponents/HeaderLogout.js";
+import { getTimeline } from "../../service/linkrService.js";
+import Trending from "../hashtag/Trending.js";
+
 
 export default function TimelineUser() {
-    const [publications, setPublications] = useState('');
-    const { refresh } = useContext(UserContext)
     const [posts, setPosts] = useState([])
     const { id } = useParams()
 
 
     async function getTimelineUser() {
         try {
-            const resp = await axios.post(`http://localhost:4000/user/${id}`, {})
+          const resp = await getTimeline(id)
             setPosts(resp.data)
         } catch (error) {
             console.log(error)
@@ -51,6 +50,7 @@ export default function TimelineUser() {
                 <Wrapper>
 
                 </Wrapper>
+                <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
             </WrapperH>
         </Wrapper>
 
@@ -65,11 +65,11 @@ const Wrapper = styled.div`
 
 const WrapperH = styled.div`
     display:flex;
-    margin-top: 40px;
+    
 `
 const Title = styled.div`
     width: 100%;
-    margin-top: 53px;
+    margin-top: 95px;
     margin-bottom:43px;
     h1{
     font-family: 'Oswald';
