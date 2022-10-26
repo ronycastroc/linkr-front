@@ -7,6 +7,7 @@ import HeaderLogout from "../authComponents/HeaderLogout";
 import { ReactTagify } from "react-tagify";
 import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -15,19 +16,31 @@ export default function Timeline() {
   const [isEditingPostId, setIsEditingPostId] = useState(null);
   const [newText, setNewText] = useState("");
   const [disabled, setDisabled] = useState("");
-
-  useEffect(() => {
-    getPublications()
+  const [offset,setOffset]=useState(0);
+  const [length,setLength]=useState('')
+  const [hasMore,setHasMore]=useState(true)
+  
+  async function loadPublications(){
+   
+    getPublications(offset)
       .then((answer) => {
-        setPublications(answer.data);
-        console.log(publications);
+        setPublications([...publications, ...answer.data.urls]);
+        setLength(answer.data.length[0].count)
+        setOffset(offset+5)
+        if(length-offset>0){
+          setHasMore(true);
+        }else{
+          setHasMore(false)
+        }
       })
       .catch((error) => {
         alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
+          error
         );
       });
-  }, [refresh]);
+  }
+  
+  useEffect(loadPublications, [refresh]);
 
   function navigateToHashtagPage(tag) {
     const hashtag = tag.replace("#", "");
@@ -96,6 +109,15 @@ export default function Timeline() {
             <h1>Timeline</h1>
           </Title>
           <AddPublication></AddPublication>
+          
+          <InfiniteScroll
+            loader={<h1>Loading...</h1>}
+            loadMore={loadPublications}
+            pageStart={0}
+            useWindow={true}
+            hasMore={hasMore}
+    
+          >
           {publications ? (
             publications.length === 0 ? (
               <Title>
@@ -159,6 +181,7 @@ export default function Timeline() {
               <h1>Loading...</h1>
             </Title>
           )}
+          </InfiniteScroll>
         </Wrapper>
         <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
         <Wrapper></Wrapper>

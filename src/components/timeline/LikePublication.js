@@ -49,8 +49,8 @@ export default function Like(postId) {
     getLikesInfo(postId)
       .then((answer) => {
         setInfo(answer.data);
-        console.log(answer.data);
-        console.log(info);
+        //console.log(answer.data);
+        //console.log(info);
       })
       .catch((error) => {
         console.log(
@@ -65,7 +65,7 @@ export default function Like(postId) {
       .then(() => {
         setLiked(true);
         setRefresh(!refresh);
-        console.log(info);
+        //console.log(info);
       })
       .catch((err) => console.log(err));
   }
@@ -76,7 +76,7 @@ export default function Like(postId) {
       .then(() => {
         setLiked(false);
         setRefresh(!refresh);
-        console.log(likeCount);
+        //console.log(likeCount);
       })
       .catch((err) => console.log(err));
   }
