@@ -6,6 +6,7 @@ import HeaderLogout from "../authComponents/HeaderLogout.js";
 import { followUser, getFollower, getTimeline, unfollowUser } from "../../service/linkrService.js";
 import Trending from "../hashtag/Trending.js";
 import UserContext from "../../contexts/Usercontext.js";
+import { useContext } from "react";
 
 export default function TimelineUser() {
     const [posts, setPosts] = useState([])
