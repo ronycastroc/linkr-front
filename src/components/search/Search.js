@@ -47,7 +47,7 @@ export default function Search(){
                     </IconContext.Provider>
                 </div>
             </form>
-            {searchs.followed?.length > 0 || searchs.users.length > 0
+            {searchs.followed?.length > 0 || searchs.users?.length > 0
             ?   <div className="search-results">
                    {searchs["followed"].map((search, idx) => {
                         console.log(search)
