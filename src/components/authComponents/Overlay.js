@@ -13,6 +13,10 @@ const OverlayLogout = styled.div`
    bottom: 0;
    left: 0;
    right: 0;
-   z-index: 3;   
+   z-index: 4;   
    display: ${props => props.showLogout ? "initial" : "none"};
+
+   @media (max-width: 650px) {
+        z-index: 8;
+    }
 `;

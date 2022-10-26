@@ -103,6 +103,30 @@ function searchUser(value){
   return promise;
 }
 
+function getFollowers() {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/followers`, config);
+  return promise;
+}
+
+function getFollower(id) {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/follower/${id}`, config);
+  return promise;
+}
+
+function followUser(id) {
+  const config = createHeaders();
+  const promise = axios.post(`${BASE_URL}/follow/${id}`, {}, config);
+  return promise;
+}
+
+function unfollowUser(id) {
+  const config = createHeaders();
+  const promise = axios.delete(`${BASE_URL}/unfollow/${id}`, config);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -118,5 +142,9 @@ export {
   getHashtagPosts,
   editPost,
   getTimeline,
-  searchUser
+  searchUser,
+  getFollowers,
+  getFollower,
+  followUser,
+  unfollowUser
 };

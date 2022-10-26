@@ -85,8 +85,7 @@ const StyledHeader = styled.div`
     left: 50%;
     top: 13px;
     transform: translate(-50%);
-    z-index: 5;
-    
+    z-index: 7;   
 
     form {
         display: flex;
@@ -181,5 +180,6 @@ const StyledHeader = styled.div`
     @media (max-width: 650px) {
         top: 80px;
         width: 90%;
+        position: absolute;
   }
 `
