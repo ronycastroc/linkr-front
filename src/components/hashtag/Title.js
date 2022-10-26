@@ -6,7 +6,7 @@ export default function ({data}) {
   <>
   <TitleWrapper>
     <p>{data}</p>
-  </TitleWrapper>;
+  </TitleWrapper>
   </>)
   
 }
