@@ -9,20 +9,21 @@ import { searchUser } from "../../service/linkrService";
 
 export default function Search(){
 
-    const [ searchs, setSearch ] = useState([])
+    const [ searchs, setSearch ] = useState({followed: [], users: []})
     let navigate = useNavigate()
 
     async function SearchUsers(event){
         //event.preventDefault()
         const  {value} = event.target
+        console.log(value)
         if(!value){ 
-            setSearch([])
+            setSearch({followed: [], users: []})
             return
         }
 
         try{
            const resp = await searchUser(value)
-           //console.log(resp)
+           console.log(resp.data)
             setSearch(resp.data)
         }catch {
           console.log("deu ruim na requisição")
@@ -46,16 +47,26 @@ export default function Search(){
                     </IconContext.Provider>
                 </div>
             </form>
-            {searchs.length > 0 
+            {searchs.followed?.length > 0 || searchs.users.length > 0
             ?   <div className="search-results">
-                   {searchs.map((search, idx) => {
+                   {searchs["followed"].map((search, idx) => {
+                        console.log(search)
+                        const delay = `${idx + 1}00ms`
+                        return (
+                            <ul>
+                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name} <p>following</p></li>
+                            </ul>
+                        )
+                   })} 
+
+                    {searchs["users"].map((search, idx) => {
                         const delay = `${idx + 1}00ms`
                         return (
                             <ul>
                                 <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
                             </ul>
                         )
-                   })} 
+                   })}
                 </div> 
             : ""}
         </StyledHeader>
@@ -148,6 +159,10 @@ const StyledHeader = styled.div`
         width: 50px;
         height: 50px;
         border-radius: 50%;
+    }
+
+    .search-results ul li p {
+        margin-left: 10px;
     }
 
     @keyframes rigthToLeft {

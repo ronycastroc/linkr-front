@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "https://project-linkr-back.herokuapp.com";
+//const BASE_URL = "https://project-linkr-back.herokuapp.com";
 
-//const BASE_URL = "http://localhost:4000"; 
+const BASE_URL = "http://localhost:4000"; 
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -97,7 +97,9 @@ function getTimeline(id) {
 }
 
 function searchUser(value){
-  const promise = axios.get(`${BASE_URL}/users?filter=${value}`);
+  const userid = localStorage.getItem("userId")
+  console.log(userid)
+  const promise = axios.get(`${BASE_URL}/users?filter=${value}&&userId=${userid}`);
   return promise;
 }
 
