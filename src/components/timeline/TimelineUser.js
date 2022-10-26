@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components"
 import { Publication } from "./Publication.js"
 import HeaderLogout from "../authComponents/HeaderLogout.js";
