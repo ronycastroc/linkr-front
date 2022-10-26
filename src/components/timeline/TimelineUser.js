@@ -36,7 +36,8 @@ export default function TimelineUser() {
             followUser(id)
                 .then(() => {
                     setRefresh(!refresh)
-                    setDisabled(false)})
+                    setDisabled(false)
+                })
                 .catch((error) => {
                     setDisabled(false)
                     alert("The operation could not be performed, please try again.")
@@ -46,7 +47,8 @@ export default function TimelineUser() {
             unfollowUser(id)
                 .then(() => {
                     setRefresh(!refresh)
-                    setDisabled(false)})
+                    setDisabled(false)
+                })
                 .catch((error) => {
                     setDisabled(false)
                     alert("The operation could not be performed, please try again.")
@@ -59,7 +61,8 @@ export default function TimelineUser() {
         getFollower(id)
             .then(res => {
                 setIsFollowed(res.data)
-                setDisabled(false)})
+                setDisabled(false)
+            })
             .catch((error) => console.log(error))
     }, [refresh]);
 
@@ -107,26 +110,6 @@ export default function TimelineUser() {
     )
 }
 
-const ButtonFollow = styled.button`
-    border: none;
-    width: 112px;
-    height: 31px;
-    position: absolute;
-    top: 120px;
-    right: 12%;
-    border-radius: 5px;
-    background-color: ${props => props.isFollowed ? "#1877F2" : "#FFFFFF"};
-    color: ${props => props.isFollowed ? "#FFFFFF" : "#1877F2"};
-    font-weight: 700;
-    cursor: pointer;
-
-    @media (max-width: 650px) {
-        top: 165px;
-        right: 5%;
-        width: 90px;
-    }
-`;
-
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
@@ -155,3 +138,29 @@ const Title = styled.div`
         padding-left: 5%;
     }
  `
+
+const ButtonFollow = styled.button`
+border: none;
+width: 112px;
+height: 31px;
+position: absolute;
+top: 120px;
+right: 12%;
+border-radius: 5px;    
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s linear;      
+background-color: ${props => props.isFollowed ? "#1877F2" : "#FFFFFF"};
+color: ${props => props.isFollowed ? "#FFFFFF" : "#1877F2"};   
+
+&:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 650px) {
+    top: 165px;
+    right: 5%;
+    width: 90px;
+}
+`;
