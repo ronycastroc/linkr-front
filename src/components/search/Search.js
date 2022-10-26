@@ -54,7 +54,7 @@ export default function Search(){
                         const delay = `${idx + 1}00ms`
                         return (
                             <ul>
-                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name} <p>following</p></li>
+                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name} <div className="bolinha"></div> <p>following</p></li>
                             </ul>
                         )
                    })} 
@@ -160,8 +160,23 @@ const StyledHeader = styled.div`
         border-radius: 50%;
     }
 
+    .search-results ul li .bolinha {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #C5C5C5;
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
     .search-results ul li p {
-        margin-left: 10px;
+        margin-left: 5px;
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 23px;
+        color: #C5C5C5;
     }
 
     @keyframes rigthToLeft {
