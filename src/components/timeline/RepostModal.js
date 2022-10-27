@@ -2,7 +2,11 @@ import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaRetweet } from "react-icons/fa";
 import Modal from "react-modal";
-import { repostPost, getReposts } from "../../service/linkrService";
+import {
+  repostPost,
+  getReposts,
+  getRepostInfo,
+} from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext";
 
 const customStyles = {
@@ -31,6 +35,7 @@ export default function ModalRepost(postId) {
   const [loading, setLoading] = useState(false);
   const [repostCount, setRepostCount] = useState(0);
   const { refresh, setRefresh } = useContext(UserContext);
+  const [name, setName] = useState("");
 
   function openModal() {
     setIsOpen(true);
@@ -59,9 +64,11 @@ export default function ModalRepost(postId) {
   }
 
   useEffect(() => {
-    getReposts(postId)
+    getRepostInfo(postId)
       .then((answer) => {
-        setRepostCount(answer.data);
+        setRepostCount(answer.data[0].respostCount);
+        setName(answer.data[0].name);
+        //console.log(answer.data[0]);
       })
       .catch((error) => {
         console.log(
@@ -95,7 +102,7 @@ export default function ModalRepost(postId) {
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
-          contentLabel="Delete Post Modal"
+          contentLabel="Repost Modal"
           shouldCloseOnOverlayClick={true}
         >
           <Confirmation>
