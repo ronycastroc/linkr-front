@@ -96,9 +96,11 @@ function getTimeline(id) {
   return promise;
 }
 
-function searchUser(value){
-  const userid = localStorage.getItem("userId")
-  const promise = axios.get(`${BASE_URL}/users?filter=${value}&&userId=${userid}`);
+function searchUser(value) {
+  const userid = localStorage.getItem("userId");
+  const promise = axios.get(
+    `${BASE_URL}/users?filter=${value}&&userId=${userid}`
+  );
   return promise;
 }
 
@@ -125,6 +127,25 @@ function unfollowUser(id) {
   const promise = axios.delete(`${BASE_URL}/unfollow/${id}`, config);
   return promise;
 }
+function repostPost(postId) {
+  const config = createHeaders();
+  const promise = axios.post(
+    `${BASE_URL}/repost/${postId.postId}`,
+    postId,
+    config
+  );
+  return promise;
+}
+
+function getReposts() {
+  const promise = axios.get(`${BASE_URL}/reposts`);
+  return promise;
+}
+
+function getRepostInfo(postId) {
+  const promise = axios.get(`${BASE_URL}/reposts/${postId.postId}`);
+  return promise;
+}
 
 export {
   postSignUp,
@@ -145,5 +166,8 @@ export {
   getFollowers,
   getFollower,
   followUser,
-  unfollowUser
+  unfollowUser,
+  repostPost,
+  getReposts,
+  getRepostInfo,
 };

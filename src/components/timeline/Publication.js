@@ -9,6 +9,7 @@ import Like from "./LikePublication.js";
 import { TiPencil } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import ModalRepost from "./RepostModal.js";
+import { FaRetweet } from "react-icons/fa";
 
 function Publication({
   id,
@@ -75,6 +76,7 @@ function EditPublication({
           <img src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
+            <ModalRepost postId={id} />
           </LikeDiv>
         </WrapperPublication>
         <WrapperPublication>
@@ -102,6 +104,58 @@ function EditPublication({
         </WrapperPublication>
       </WrapperH>
     </PublicationDiv>
+  );
+}
+
+function RepostedPublication({
+  id,
+  name,
+  image,
+  text,
+  url,
+  urlImage,
+  title,
+  description,
+  reposterName,
+  userId,
+  reposterId,
+  loggedId,
+}) {
+  let navigate = useNavigate();
+  return (
+    <RepostDiv>
+      <RepostSpan>
+        <FaRetweet color="white" fontSize={"23px"} />
+        {reposterId === loggedId
+          ? `Re-posted by you`
+          : `Re-posted by ${reposterName}`}
+      </RepostSpan>
+      <PublicationDiv>
+        <WrapperH>
+          <WrapperPublicationProfile>
+            <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
+            <LikeDiv>
+              <Like postId={id} />
+              <ModalRepost postId={id} />
+            </LikeDiv>
+          </WrapperPublicationProfile>
+          <WrapperPublication>
+            <Icons>
+              <TiPencil color="white" />
+              <ModalDelete postId={id} />
+            </Icons>
+            <h1 onClick={() => navigate(`/user/${userId}`)}>{name}</h1>
+            <p>{text}</p>
+            <Snippet
+              url={url}
+              description={description}
+              title={title}
+              image={image}
+            ></Snippet>
+          </WrapperPublication>
+        </WrapperH>
+      </PublicationDiv>
+    </RepostDiv>
   );
 }
 
@@ -166,7 +220,7 @@ function AddPublication() {
     </AddPublicationDiv>
   );
 }
-export { Publication, AddPublication, EditPublication };
+export { Publication, AddPublication, EditPublication, RepostedPublication };
 const ButtonW = styled.div`
   display: flex;
   justify-content: end;
@@ -305,4 +359,44 @@ const InputNewText = styled.input`
   color: #4d4d4d;
   margin-bottom: 5px;
   text-align: initial;
+`;
+
+const RepostDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 611px;
+  height: 275px;
+  background: #1e1e1e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  //padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 26.5px;
+    display: block;
+  }
+  @media (max-width: 650px) {
+    width: 135vw;
+    border-radius: 0;
+  }
+`;
+
+const RepostSpan = styled.div`
+  width: 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  padding-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
