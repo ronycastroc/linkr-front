@@ -25,7 +25,6 @@ export default function Trending({onClick}) {
         setTranding(response.data);
        })
       .catch((err) => {
-        console.log(err)
         alert("Error trying to list hashtags trending");
       });
   }

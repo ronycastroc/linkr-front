@@ -1,7 +1,17 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { editPost, getPublications,getNewPublictions } from "../../service/linkrService";
-import { Publication, AddPublication, EditPublication } from "./Publication.js";
+import {
+  editPost,
+  getPublications,
+  getReposts,
+  getNewPublications
+} from "../../service/linkrService";
+import {
+  Publication,
+  AddPublication,
+  EditPublication,
+  RepostedPublication,
+} from "./Publication.js";
 import UserContext from "../../contexts/Usercontext.js";
 import HeaderLogout from "../authComponents/HeaderLogout";
 import { ReactTagify } from "react-tagify";
@@ -21,7 +31,9 @@ export default function Timeline() {
   const [newPostNumber,setNewPostNumber]=useState('');
   const [hasNew,setHasNew]=useState('')
   const [isFollowing,setIsFollowing]=useState([]);
-  
+  const [reposts, setReposts] = useState("");
+  const userId = JSON.parse(localStorage.getItem("userId"));
+
   async function loadPublications(){
     getPublications()
       .then((answer) => {
@@ -38,7 +50,7 @@ export default function Timeline() {
   useEffect(()=>{loadPublications()}, [refresh]);
 
   useInterval(() => {
-    getNewPublictions(timelineLength)
+    getNewPublications(timelineLength)
       .then((answer) => {
         setNewPostNumber(answer.data.newPublicationLength)
         if(newPostNumber>0){
@@ -62,6 +74,19 @@ export default function Timeline() {
     setNewPostNumber(0)
   }
 
+  useEffect(() => {
+    getReposts()
+      .then((answer) => {
+        setReposts(answer.data);
+        console.log(answer.data);
+      })
+      .catch((error) => {
+        alert(
+          "An error occured while trying to fetch re-posts, please refresh the page"
+        );
+      });
+  }, [refresh]);
+
   function navigateToHashtagPage(tag) {
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
@@ -82,7 +107,7 @@ export default function Timeline() {
     setDisabled("Disabled");
     editPost(postId, body)
       .then(() => {
-        console.log(postId);
+        //console.log(postId);
         setIsEditingPostId(null);
         setRefresh(!refresh);
       })
@@ -104,11 +129,11 @@ export default function Timeline() {
   function handleKeyDown(e, postId) {
     if (e.keyCode === 27) {
       handleCancelEdit();
-      console.log(postId);
+      //console.log(postId);
     }
     if (e.keyCode === 13) {
       handleSendEdit(e, postId);
-      console.log(postId);
+      //console.log(postId);
     }
   }
   const inputRef = useRef(null);
@@ -192,6 +217,35 @@ export default function Timeline() {
             <Title>
               <h1>Loading...</h1>
             </Title>
+          )}
+
+          {reposts ? (
+            reposts.map((value, key) => (
+              <RepostedPublication
+                key={key}
+                userId={value.userId}
+                id={value.id}
+                text={
+                  <ReactTagify
+                    colors="white"
+                    tagClicked={(tag) => navigateToHashtagPage(tag)}
+                  >
+                    {value.text}
+                  </ReactTagify>
+                }
+                url={value.url}
+                description={value.description}
+                image={value.image}
+                title={value.title}
+                urlImage={value.urlImage}
+                name={value.name}
+                reposterName={value.reposterName}
+                reposterId={value.reposterId}
+                loggedId={userId}
+              ></RepostedPublication>
+            ))
+          ) : (
+            <></>
           )}
         </Wrapper>
         <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
