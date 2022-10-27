@@ -120,12 +120,12 @@ const TW = styled.div`
     display: flex;
     width: 100%;
     position: relative;
-    right: 45vw;
-    top: 25vw;
+    top: 80px;
   }
 `;
 
 const WT = styled.span`
+ margin-top: 5px;
   @media (max-width: 650px) {
     * {
       box-sizing: border-box;
@@ -136,8 +136,12 @@ const WT = styled.span`
 const WrapperContent = styled.div`
   width: 100%;
   height: 100%;
-
   position: relative;
+ margin-top: 30px;
+ 
+ @media (max-width: 650px) {
+    margin-top: 10px;
+  }
   top: 200px;
   display: flex;
   flex-direction: column;
@@ -149,6 +153,5 @@ const WrapperH = styled.div`
 `;
 
 const PubWrapper = styled.div`
-  position: relative;
-  top: 20%;
+  margin-top: -20px;
 `;

@@ -13,6 +13,9 @@ import {
 } from "../comments/Comments.js";
 
 
+import { useNavigate } from "react-router-dom";
+import ModalRepost from "./RepostModal.js";
+import { FaRetweet } from "react-icons/fa";
 
 function Publication({
   id,
@@ -24,10 +27,12 @@ function Publication({
   title,
   description,
   handleEditClick,
+  userId,
 }) {
   const [openComment, setOpenComment] = useState(false);
   const [countComments, setCountComments] = useState(0);
- 
+  let navigate = useNavigate();
+
 
   useEffect(() => {
     getCountComments(id);
@@ -37,7 +42,7 @@ function Publication({
   function getCountComments() {
     getCounting(id)
       .then((answer) => {
-        setCountComments(answer.data); //verificar se vai atualizar na hora ou após inserção do novo comentario
+        setCountComments(answer.data); 
       })
       .catch((error) => {
         alert(
@@ -55,10 +60,11 @@ function Publication({
       <PublicationDiv>
         <WrapperH>
           <WrapperPublicationProfile>
-            <img src={urlImage} />
-            <LikeDiv>
-              <Like postId={id} />
-            </LikeDiv>
+          <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
+          <LikeDiv>
+            <Like postId={id} />
+            <ModalRepost postId={id} />
+          </LikeDiv>
             <CommentsCountWrapper>
               <CommentsCounting  countComments={countComments} onClick={() => openCommentBox()} />
             </CommentsCountWrapper>
@@ -68,7 +74,7 @@ function Publication({
               <TiPencil color="white" onClick={() => handleEditClick(id)} />
               <ModalDelete postId={id} />
             </Icons>
-            <h1>{name}</h1>
+            <h1 onClick={() => navigate(`/user/${userId}`)}>{name}</h1>
             <p>{text}</p>
             <Snippet
               url={url}
@@ -111,6 +117,7 @@ function EditPublication({
           <img src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
+            <ModalRepost postId={id} />
           </LikeDiv>
         </WrapperPublication>
         <WrapperPublication>
@@ -138,6 +145,58 @@ function EditPublication({
         </WrapperPublication>
       </WrapperH>
     </PublicationDiv>
+  );
+}
+
+function RepostedPublication({
+  id,
+  name,
+  image,
+  text,
+  url,
+  urlImage,
+  title,
+  description,
+  reposterName,
+  userId,
+  reposterId,
+  loggedId,
+}) {
+  let navigate = useNavigate();
+  return (
+    <RepostDiv>
+      <RepostSpan>
+        <FaRetweet color="white" fontSize={"23px"} />
+        {reposterId === loggedId
+          ? `Re-posted by you`
+          : `Re-posted by ${reposterName}`}
+      </RepostSpan>
+      <PublicationDiv>
+        <WrapperH>
+          <WrapperPublicationProfile>
+            <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
+            <LikeDiv>
+              <Like postId={id} />
+              <ModalRepost postId={id} />
+            </LikeDiv>
+          </WrapperPublicationProfile>
+          <WrapperPublication>
+            <Icons>
+              <TiPencil color="white" />
+              <ModalDelete postId={id} />
+            </Icons>
+            <h1 onClick={() => navigate(`/user/${userId}`)}>{name}</h1>
+            <p>{text}</p>
+            <Snippet
+              url={url}
+              description={description}
+              title={title}
+              image={image}
+            ></Snippet>
+          </WrapperPublication>
+        </WrapperH>
+      </PublicationDiv>
+    </RepostDiv>
   );
 }
 
@@ -202,7 +261,7 @@ function AddPublication() {
     </AddPublicationDiv>
   );
 }
-export { Publication, AddPublication, EditPublication };
+export { Publication, AddPublication, EditPublication, RepostedPublication };
 const ButtonW = styled.div`
   display: flex;
   justify-content: end;
@@ -222,6 +281,7 @@ const WrapperPublication = styled.div`
     font-size: 19px;
     line-height: 23px;
     color: #ffffff;
+    cursor: pointer;
   }
   p {
     font-family: "Lato";
@@ -235,6 +295,10 @@ const WrapperPublication = styled.div`
 
 const WrapperPublicationProfile = styled.div`
   padding-left: 20px;
+
+  img {
+    cursor: pointer;
+  }
 `;
 
 const WrapperAddPublication = styled.div`
@@ -357,4 +421,44 @@ const CommentsWrapper = styled.div`
   width: 100%;
   position: relative;
   top: 0;
+`
+
+const RepostDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 611px;
+  height: 275px;
+  background: #1e1e1e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  //padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 26.5px;
+    display: block;
+  }
+  @media (max-width: 650px) {
+    width: 135vw;
+    border-radius: 0;
+  }
+`;
+
+const RepostSpan = styled.div`
+  width: 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  padding-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;

@@ -49,8 +49,8 @@ export default function Like(postId) {
     getLikesInfo(postId)
       .then((answer) => {
         setInfo(answer.data);
-        //console.log(answer.data);
-        console.log(info);
+        /* console.log(answer.data);
+        console.log(info); */
       })
       .catch((error) => {
         console.log(

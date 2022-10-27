@@ -6,7 +6,7 @@ export default function ({data}) {
   <>
   <TitleWrapper>
     <p>{data}</p>
-  </TitleWrapper>;
+  </TitleWrapper>
   </>)
   
 }
@@ -17,14 +17,15 @@ const TitleWrapper = styled.p`
   height: 64px;
   left: 241px;
   top: 22%;
+  z-index: 10;
 
   p{font-family: "Oswald";
   font-style: normal;
   font-weight: 700;
   font-size: 43px;
   line-height: 64px;
-
-  color: #ffffff;}
+  color: #ffffff;
+}
   @media (max-width: 650px) {
     * {
       box-sizing: border-box;
@@ -37,4 +38,10 @@ const TitleWrapper = styled.p`
     top: -5px;
    }
 
+
+  @media (max-width: 650px) {
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%);
+  }
 `;

@@ -6,7 +6,6 @@ import styled from "styled-components";
 import React from "react";
 import UserContext from "../../contexts/Usercontext";
 
-
 export default function HeaderLogout() {
     const { showLogout, setShowLogout } = useContext(UserContext);
 
@@ -54,7 +53,11 @@ const Header = styled.div`
     align-items: center;
     position: fixed;
     top: 0;
-    z-index: 4;
+    z-index: 6;
+
+    @media (max-width: 650px) {
+        z-index: 10;
+    }
     
 `;
 
@@ -86,10 +89,11 @@ const ProfileLogout = styled.div`
     justify-content: space-evenly;
     align-items: center;
     cursor: pointer;
+    z-index: 6;
 
     img {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         border-radius: 100%;
         object-fit: cover;
     }
@@ -98,7 +102,6 @@ const ProfileLogout = styled.div`
         font-size: 35px;
         color: #FFFFFF;
     }
-
 `;
 
 const LogoutBar = styled.div`
@@ -113,16 +116,19 @@ const LogoutBar = styled.div`
     align-items: center;
     border-bottom-left-radius: 20px;
     position: fixed;
-    transform: ${(props) => (props.showLogout ? "translateY(0)" : "translateY(-72px)")};
-    opacity: ${(props) => (props.showLogout ? "1" : "0")};
-    transition: all 0.3s ease-out;
-    z-index: 3;    
+    transform: ${(props) => (props.showLogout ? "translateY(0)" : "translateY(-150px)")};    
+    transition: all 0.5s ease-out;
+    z-index: 5;    
     cursor: pointer;
 
     p {
         font-weight: 700;
         color: #FFFFFF;
         font-size: 1rem;
+    }
+
+    @media (max-width: 650px) {
+        z-index: 9;
     }
 `;
 
