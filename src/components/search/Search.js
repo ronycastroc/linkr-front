@@ -5,25 +5,26 @@ import styled from "styled-components"
 import {IoSearchOutline} from "react-icons/io5"
 import { IconContext } from "react-icons";
 import { useNavigate } from "react-router-dom";
-
-
+import { searchUser } from "../../service/linkrService";
 
 export default function Search(){
 
-    const [ searchs, setSearch ] = useState([])
+    const [ searchs, setSearch ] = useState({followed: [], users: []})
     let navigate = useNavigate()
 
     async function SearchUsers(event){
         //event.preventDefault()
         const  {value} = event.target
+        //console.log(value)
         if(!value){ 
-            setSearch([])
+            setSearch({followed: [], users: []})
             return
         }
 
         try{
-            const resp = await axios.get(`http://localhost:4000/users?filter=${value}`);
-        setSearch(resp.data)
+           const resp = await searchUser(value)
+           //console.log(resp.data)
+            setSearch(resp.data)
         }catch {
           console.log("deu ruim na requisição")
         }
@@ -46,16 +47,26 @@ export default function Search(){
                     </IconContext.Provider>
                 </div>
             </form>
-            {searchs.length > 0 
+            {searchs.followed?.length > 0 || searchs.users?.length > 0
             ?   <div className="search-results">
-                   {searchs.map((search, idx) => {
+                   {searchs["followed"].map((search, idx) => {
+                        //console.log(search)
                         const delay = `${idx + 1}00ms`
                         return (
-                            <ul>
-                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
+                            <ul key={idx}>
+                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name} <div className="bolinha"></div> <p>following</p></li>
                             </ul>
                         )
                    })} 
+
+                    {searchs["users"].map((search, idx) => {
+                        const delay = `${idx + 1}00ms`
+                        return (
+                            <ul key={idx}>
+                                <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
+                            </ul>
+                        )
+                   })}
                 </div> 
             : ""}
         </StyledHeader>
@@ -74,8 +85,7 @@ const StyledHeader = styled.div`
     left: 50%;
     top: 13px;
     transform: translate(-50%);
-    z-index: 5;
-    
+    z-index: 7;   
 
     form {
         display: flex;
@@ -150,6 +160,25 @@ const StyledHeader = styled.div`
         border-radius: 50%;
     }
 
+    .search-results ul li .bolinha {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #C5C5C5;
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
+    .search-results ul li p {
+        margin-left: 5px;
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 23px;
+        color: #C5C5C5;
+    }
+
     @keyframes rigthToLeft {
         0% {
             left: 100%;
@@ -166,5 +195,6 @@ const StyledHeader = styled.div`
     @media (max-width: 650px) {
         top: 80px;
         width: 90%;
+        position: absolute;
   }
 `
