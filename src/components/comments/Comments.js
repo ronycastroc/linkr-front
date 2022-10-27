@@ -2,12 +2,9 @@ import styled from "styled-components";
 import { AiOutlineComment } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import { getComments, getCounting, postComments, } from "../../service/linkrService";
-
-
+import { getComments, postComments, } from "../../service/linkrService";
 
 function CommentsCounting({countComments, onClick }) {
-  
 
   return (
     <Wrapper onClick={onClick}>
