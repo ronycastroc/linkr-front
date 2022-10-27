@@ -20,7 +20,8 @@ export default function Timeline() {
   const [timelineLength,setTimelineLength]=useState("");
   const [newPostNumber,setNewPostNumber]=useState('');
   const [hasNew,setHasNew]=useState('')
-
+  const [isFollowing,setIsFollowing]=useState([]);
+  
   async function loadPublications(){
     getPublications()
       .then((answer) => {
