@@ -73,7 +73,7 @@ export default function Timeline() {
     setDisabled("Disabled");
     editPost(postId, body)
       .then(() => {
-        console.log(postId);
+        //console.log(postId);
         setIsEditingPostId(null);
         setRefresh(!refresh);
       })
@@ -95,11 +95,11 @@ export default function Timeline() {
   function handleKeyDown(e, postId) {
     if (e.keyCode === 27) {
       handleCancelEdit();
-      console.log(postId);
+      //console.log(postId);
     }
     if (e.keyCode === 13) {
       handleSendEdit(e, postId);
-      console.log(postId);
+      //console.log(postId);
     }
   }
   const inputRef = useRef(null);
