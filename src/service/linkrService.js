@@ -1,12 +1,8 @@
 import axios from "axios";
 
-/* const BASE_URL = "https://project-linkr-back.herokuapp.com"; */
+const BASE_URL = "https://project-linkr-back.herokuapp.com";
 
-<<<<<<< HEAD
-const BASE_URL = "http://localhost:4000";
-=======
-//const BASE_URL = "http://localhost:4000"; 
->>>>>>> main
+//const BASE_URL = "http://localhost:4000";
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -100,9 +96,11 @@ function getTimeline(id) {
   return promise;
 }
 
-function searchUser(value){
-  const userid = localStorage.getItem("userId")
-  const promise = axios.get(`${BASE_URL}/users?filter=${value}&&userId=${userid}`);
+function searchUser(value) {
+  const userid = localStorage.getItem("userId");
+  const promise = axios.get(
+    `${BASE_URL}/users?filter=${value}&&userId=${userid}`
+  );
   return promise;
 }
 
@@ -141,7 +139,8 @@ function repostPost(postId) {
 
 function getReposts(postId) {
   const promise = axios.get(`${BASE_URL}/repost/${postId.postId}`);
-  return promise}
+  return promise;
+}
 
 export {
   postSignUp,
@@ -164,5 +163,5 @@ export {
   followUser,
   unfollowUser,
   repostPost,
-  getReposts
+  getReposts,
 };
