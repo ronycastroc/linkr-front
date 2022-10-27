@@ -15,7 +15,7 @@ export default function Search(){
     async function SearchUsers(event){
         //event.preventDefault()
         const  {value} = event.target
-        console.log(value)
+        //console.log(value)
         if(!value){ 
             setSearch({followed: [], users: []})
             return
@@ -23,7 +23,7 @@ export default function Search(){
 
         try{
            const resp = await searchUser(value)
-           console.log(resp.data)
+           //console.log(resp.data)
             setSearch(resp.data)
         }catch {
           console.log("deu ruim na requisição")
@@ -50,10 +50,10 @@ export default function Search(){
             {searchs.followed?.length > 0 || searchs.users?.length > 0
             ?   <div className="search-results">
                    {searchs["followed"].map((search, idx) => {
-                        console.log(search)
+                        //console.log(search)
                         const delay = `${idx + 1}00ms`
                         return (
-                            <ul>
+                            <ul key={idx}>
                                 <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name} <div className="bolinha"></div> <p>following</p></li>
                             </ul>
                         )
@@ -62,7 +62,7 @@ export default function Search(){
                     {searchs["users"].map((search, idx) => {
                         const delay = `${idx + 1}00ms`
                         return (
-                            <ul>
+                            <ul key={idx}>
                                 <li onClick={() => {navigate(`/user/${search.id}`); setSearch([])}} key={idx} style={{'--delay': delay}}><div className="avatar"><img src={search.urlImage}/></div>{search.name}</li>
                             </ul>
                         )

@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import { Publication } from "./Publication.js"
 import HeaderLogout from "../authComponents/HeaderLogout.js";
 import { followUser, getFollower, getTimeline, unfollowUser } from "../../service/linkrService.js";
 import Trending from "../hashtag/Trending.js";
 import UserContext from "../../contexts/Usercontext.js";
-import { useContext } from "react";
 
 export default function TimelineUser() {
     const [posts, setPosts] = useState([])
@@ -27,7 +26,8 @@ export default function TimelineUser() {
 
     useEffect(() => {
         getTimelineUser()
-    }, [posts]);
+        .then(() => setRefresh(!refresh))
+    }, [refresh]);
 
     function followUnfollow() {
         setRefresh(!refresh);
