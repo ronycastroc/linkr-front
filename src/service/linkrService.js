@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "https://project-linkr-back.herokuapp.com";
+//const BASE_URL = "https://project-linkr-back.herokuapp.com";
 
-//const BASE_URL = "http://localhost:4000"; 
+const BASE_URL = "http://localhost:4000"; 
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -35,6 +35,14 @@ function getPublications() {
   const promise = axios.get(`${BASE_URL}/timeline`, config);
   return promise;
 }
+
+function getNewPublictions(length){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/update?length=${length}`, config);
+  return promise;
+}
+
+
 function getHashtagTrending() {
   const config = createHeaders();
   const promise = axios.get(`${BASE_URL}/trending`, config);
@@ -145,5 +153,6 @@ export {
   getFollowers,
   getFollower,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getNewPublictions
 };

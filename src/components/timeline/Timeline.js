@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { editPost, getPublications } from "../../service/linkrService";
+import { editPost, getPublications,getNewPublictions } from "../../service/linkrService";
 import { Publication, AddPublication, EditPublication } from "./Publication.js";
 import UserContext from "../../contexts/Usercontext.js";
 import HeaderLogout from "../authComponents/HeaderLogout";
 import { ReactTagify } from "react-tagify";
 import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
+import useInterval from 'use-interval'
+import {HiOutlineRefresh} from "react-icons/hi"
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -15,19 +17,49 @@ export default function Timeline() {
   const [isEditingPostId, setIsEditingPostId] = useState(null);
   const [newText, setNewText] = useState("");
   const [disabled, setDisabled] = useState("");
+  const [timelineLength,setTimelineLength]=useState("");
+  const [newPostNumber,setNewPostNumber]=useState('');
+  const [hasNew,setHasNew]=useState('')
 
-  useEffect(() => {
+  async function loadPublications(){
     getPublications()
       .then((answer) => {
-        setPublications(answer.data);
-        console.log(publications);
+        setPublications(answer.data.urls);
+        setTimelineLength(answer.data.length[0].count)
       })
       .catch((error) => {
         alert(
           "An error occured while trying to fetch the posts, please refresh the page"
         );
       });
-  }, [refresh]);
+  }
+
+  useEffect(()=>{loadPublications()}, [refresh]);
+
+  useInterval(() => {
+    getNewPublictions(timelineLength)
+      .then((answer) => {
+        setNewPostNumber(answer.data.newPublicationLength)
+        if(newPostNumber>0){
+          setHasNew(
+          <NewPosts onClick={()=>{
+            ref()
+            }}>
+            <h5>{newPostNumber} new posts, load more!</h5>
+            <HiOutlineRefresh color="white" size="22px"></HiOutlineRefresh>
+          </NewPosts>)
+        }
+      })
+      .catch((error) => {
+      alert(error);
+    });
+  },5000)
+
+  async function ref (){
+    setRefresh(!refresh)
+    setHasNew('')
+    setNewPostNumber(0)
+  }
 
   function navigateToHashtagPage(tag) {
     const hashtag = tag.replace("#", "");
@@ -96,6 +128,7 @@ export default function Timeline() {
             <h1>Timeline</h1>
           </Title>
           <AddPublication></AddPublication>
+          {hasNew}
           {publications ? (
             publications.length === 0 ? (
               <Title>
@@ -194,3 +227,24 @@ const Title = styled.div`
     }
   }
 `;
+const NewPosts = styled.div`
+  width: 100%;
+  height: 61px;
+  background: #1877F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  margin-bottom: 17px;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  cursor: pointer;
+  h5{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    margin-right: 5px;
+  }
+`
