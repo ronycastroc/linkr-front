@@ -22,7 +22,7 @@ function Publication({
   userId
 }) {
 
-  let navigate = useNavigate()
+  const navigate = useNavigate()
   return (
     <PublicationDiv>
       <WrapperH>
@@ -105,7 +105,7 @@ function EditPublication({
 }
 
 function AddPublication() {
-  const { refresh, setRefresh } = useContext(UserContext);
+ 
   const [link, setLink] = useState("");
   const [text, setText] = useState("");
   const [disabled, setDisabled] = useState("");
@@ -121,7 +121,7 @@ function AddPublication() {
     setButton("Publishing...");
     postPublication(body)
       .then((answer) => {
-        setRefresh(!refresh);
+        
         setText("");
         setLink("");
       })

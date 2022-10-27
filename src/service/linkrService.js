@@ -35,6 +35,14 @@ function getPublications(offset) {
   const promise = axios.get(`${BASE_URL}/timeline?offset=${offset}`, config);
   return promise;
 }
+function test(){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/test`, config);
+  return promise;
+
+
+}
+
 function getHashtagTrending() {
   const config = createHeaders();
   const promise = axios.get(`${BASE_URL}/trending`, config);
@@ -105,4 +113,5 @@ export {
   getLikesInfo,
   getHashtagPosts,
   editPost,
+  test
 };

@@ -2,7 +2,6 @@
 import GlobalStyle from "../assets/style/GlobalStyle";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Timeline from "./timeline/Timeline.js";
-import Trending from "./hashtag/Trending";
 import UserContext from "../contexts/Usercontext.js";
 import { useState } from "react";
 import SignIn from "./authComponents/SignIn";
@@ -11,9 +10,9 @@ import HashtagPage from "./hashtag/HashtagPage"
 import Overlay from "./authComponents/Overlay";
 import PrivatePage from "../PrivatePage.js";
 import TimelineUser from "./timeline/TimelineUser";
-import Test from "./Test";
+
 export default function App() {
-   const [refresh, setRefresh] = useState(false)
+   const [refresh, setRefresh] = useState(true)
    const [showLogout, setShowLogout] = useState(false);
 
    return (
@@ -28,7 +27,6 @@ export default function App() {
                   <Route path="/hashtag/:hashtag" element={<PrivatePage><HashtagPage /></PrivatePage>} />
                   <Route path="/timeline" element={<PrivatePage><Timeline /></PrivatePage>} />
                   <Route path="/user/:id" element={<TimelineUser/>} />
-                  <Route path="/test" element={<Test/>}/>
                </Routes>
             </UserContext.Provider>
          </BrowserRouter>

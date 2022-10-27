@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { editPost, getPublications } from "../../service/linkrService";
+import { editPost, getPublications,test } from "../../service/linkrService";
 import { Publication, AddPublication, EditPublication } from "./Publication.js";
 import UserContext from "../../contexts/Usercontext.js";
 import HeaderLogout from "../authComponents/HeaderLogout";
@@ -8,6 +8,9 @@ import { ReactTagify } from "react-tagify";
 import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroller';
+import {HiOutlineRefresh} from "react-icons/hi"
+import useInterval from 'use-interval'
+
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -19,7 +22,8 @@ export default function Timeline() {
   const [offset,setOffset]=useState(0);
   const [length,setLength]=useState('')
   const [hasMore,setHasMore]=useState(true)
-  
+  const [hasNew,setHasNew]=useState('')
+
   async function loadPublications(){
    
     getPublications(offset)
@@ -27,6 +31,7 @@ export default function Timeline() {
         setPublications([...publications, ...answer.data.urls]);
         setLength(answer.data.length[0].count)
         setOffset(offset+5)
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         if(length-offset>0){
           setHasMore(true);
         }else{
@@ -40,7 +45,9 @@ export default function Timeline() {
       });
   }
   
-  useEffect(loadPublications, [refresh]);
+ 
+
+  useEffect(loadPublications, []);
 
   function navigateToHashtagPage(tag) {
     const hashtag = tag.replace("#", "");
@@ -80,6 +87,34 @@ export default function Timeline() {
         console.log(postId);
       });
   }
+  useInterval(() => {
+    let news;
+    test()
+      .then((answer) => {
+        news = answer.data[0].count
+        const num = news-length
+        console.log("num",num,"length",length,"news",news)
+        if(num>0){
+          setHasNew(
+          <NewPosts onClick={()=>{
+            console.log("refresh",refresh)
+            setRefresh(!refresh)
+            console.log("refresh",refresh)
+            }}>
+            <h5>{num} new posts, load more!</h5>
+            <HiOutlineRefresh color="white" size="22px"></HiOutlineRefresh>
+          </NewPosts>)
+        }
+    })
+      .catch((error) => {
+      alert(
+        error
+      );
+    });
+
+
+
+  },5000)
 
   function handleKeyDown(e, postId) {
     if (e.keyCode === 27) {
@@ -98,7 +133,7 @@ export default function Timeline() {
       inputRef.current.focus();
     }
   }, [isEditingPostId]);
-
+  const num = 5;
   return (
     <Wrapper>
       <HeaderLogout />
@@ -109,7 +144,7 @@ export default function Timeline() {
             <h1>Timeline</h1>
           </Title>
           <AddPublication></AddPublication>
-          
+          {hasNew}
           <InfiniteScroll
             loader={<h1>Loading...</h1>}
             loadMore={loadPublications}
@@ -217,3 +252,24 @@ const Title = styled.div`
     }
   }
 `;
+
+const NewPosts = styled.div`
+  width: 100%;
+  height: 61px;
+  background: #1877F2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  margin-bottom: 17px;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  h5{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    margin-right: 5px;
+  }
+`
