@@ -75,6 +75,7 @@ function EditPublication({
           <img src={urlImage} />
           <LikeDiv>
             <Like postId={id} />
+            <ModalRepost postId={id} />
           </LikeDiv>
         </WrapperPublication>
         <WrapperPublication>

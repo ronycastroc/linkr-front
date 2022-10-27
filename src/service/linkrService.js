@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "https://project-linkr-back.herokuapp.com";
+/* const BASE_URL = "https://project-linkr-back.herokuapp.com"; */
 
-/* const BASE_URL = "http://localhost:4000"; */
+const BASE_URL = "http://localhost:4000";
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -91,6 +91,21 @@ function editPost(postId, body) {
   return promise;
 }
 
+function repostPost(postId) {
+  const config = createHeaders();
+  const promise = axios.post(
+    `${BASE_URL}/repost/${postId.postId}`,
+    postId,
+    config
+  );
+  return promise;
+}
+
+function getReposts(postId) {
+  const promise = axios.get(`${BASE_URL}/repost/${postId.postId}`);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -105,4 +120,6 @@ export {
   getLikesInfo,
   getHashtagPosts,
   editPost,
+  repostPost,
+  getReposts,
 };
