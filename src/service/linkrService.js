@@ -91,6 +91,24 @@ function editPost(postId, body) {
   return promise;
 }
 
+function getComments(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/${postId}`,config);
+  return promise;
+}
+function getCounting(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/count/${postId}`,config);
+  return promise;
+}
+
+function postComments(postId,body){
+  const config = createHeaders();
+  const promise = axios.post(`${BASE_URL}/comments/${postId}`,body, config);
+  return promise;
+}
+
+
 export {
   postSignUp,
   postSignIn,
@@ -105,4 +123,7 @@ export {
   getLikesInfo,
   getHashtagPosts,
   editPost,
+  getComments,
+  postComments,
+  getCounting
 };

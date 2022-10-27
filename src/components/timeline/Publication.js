@@ -1,12 +1,19 @@
 import { Snippet } from "./Snippet.js";
 import { Button } from "./Button.js";
 import UserContext from "../../contexts/Usercontext.js";
-import { useContext, useState } from "react";
+import { useContext,useEffect, useState } from "react";
 import styled from "styled-components";
-import { postPublication } from "../../service/linkrService";
+import { postPublication,getCounting } from "../../service/linkrService";
 import ModalDelete from "./DeleteModal.js";
 import Like from "./LikePublication.js";
 import { TiPencil } from "react-icons/ti";
+import {
+  CommentsCounting,
+  Comments,
+} from "../comments/Comments.js";
+
+
+
 function Publication({
   id,
   name,
@@ -18,31 +25,66 @@ function Publication({
   description,
   handleEditClick,
 }) {
+  const [openComment, setOpenComment] = useState(false);
+  const [countComments, setCountComments] = useState(0);
+ 
+
+  useEffect(() => {
+    getCountComments(id);
+  }, []);
+  
+
+  function getCountComments() {
+    getCounting(id)
+      .then((answer) => {
+        setCountComments(answer.data); //verificar se vai atualizar na hora ou após inserção do novo comentario
+      })
+      .catch((error) => {
+        alert(
+          "An error occured while trying to fetch the comments, please refresh the page"
+        );
+      });
+  }
+
+  function openCommentBox() {
+    setOpenComment(!openComment);
+  }
+
   return (
-    <PublicationDiv>
-      <WrapperH>
-        <WrapperPublicationProfile>
-          <img src={urlImage} />
-          <LikeDiv>
-            <Like postId={id} />
-          </LikeDiv>
-        </WrapperPublicationProfile>
-        <WrapperPublication>
-          <Icons>
-            <TiPencil color="white" onClick={() => handleEditClick(id)} />
-            <ModalDelete postId={id} />
-          </Icons>
-          <h1>{name}</h1>
-          <p>{text}</p>
-          <Snippet
-            url={url}
-            description={description}
-            title={title}
-            image={image}
-          ></Snippet>
-        </WrapperPublication>
-      </WrapperH>
-    </PublicationDiv>
+    <ContentWrapper>
+      <PublicationDiv>
+        <WrapperH>
+          <WrapperPublicationProfile>
+            <img src={urlImage} />
+            <LikeDiv>
+              <Like postId={id} />
+            </LikeDiv>
+            <CommentsCountWrapper>
+              <CommentsCounting  countComments={countComments} onClick={() => openCommentBox()} />
+            </CommentsCountWrapper>
+          </WrapperPublicationProfile>
+          <WrapperPublication>
+            <Icons>
+              <TiPencil color="white" onClick={() => handleEditClick(id)} />
+              <ModalDelete postId={id} />
+            </Icons>
+            <h1>{name}</h1>
+            <p>{text}</p>
+            <Snippet
+              url={url}
+              description={description}
+              title={title}
+              image={image}
+            ></Snippet>
+          </WrapperPublication>
+        </WrapperH>
+      </PublicationDiv>
+      {openComment ? (
+        <Comments id={id} urlImage={urlImage} onSend={() => getCountComments()}/>
+      ) : (
+        <></>
+      )}
+    </ContentWrapper>
   );
 }
 
@@ -210,6 +252,7 @@ const PublicationDiv = styled.div`
   padding-bottom: 20px;
   padding-right: 20px;
   margin-bottom: 16px;
+  z-index: 1;
   img {
     width: 50px;
     height: 50px;
@@ -294,4 +337,24 @@ const InputNewText = styled.input`
   color: #4d4d4d;
   margin-bottom: 5px;
   text-align: initial;
+`;
+const CommentsCountWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  cursor: pointer;
+`;
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
+
+const CommentsWrapper = styled.div`
+  background-color: green;
+  width: 100%;
+  position: relative;
+  top: 0;
 `;
