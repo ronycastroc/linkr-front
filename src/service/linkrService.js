@@ -30,16 +30,15 @@ function postPublication(body) {
   const promise = axios.post(`${BASE_URL}/timeline`, body, config);
   return promise;
 }
-function getPublications() {
-  const id = localStorage.getItem("userId")
+function getPublications(userId,offset) {
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/timeline/${id}`, config);
+  const promise = axios.get(`${BASE_URL}/timeline/${userId}?offset=${offset}`, config);
   return promise;
 }
 
-function getNewPublications(length){
+function getNewPublications(userId,length){
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/update?length=${length}`, config);
+  const promise = axios.get(`${BASE_URL}/update/${userId}?length=${length}`, config);
   return promise;
 }
 
@@ -88,9 +87,9 @@ function getLikesInfo(postId) {
   return promise;
 }
 
-function getHashtagPosts(hashtagName) {
+function getHashtagPosts(hashtagName,offset) {
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/hashtag/${hashtagName}`, config);
+  const promise = axios.get(`${BASE_URL}/hashtag/${hashtagName}?offset=${offset}`, config);
   return promise;
 }
 
@@ -117,8 +116,9 @@ function postComments(postId,body){
   return promise;
 }
 
-function getTimeline(id) {
-  const promise = axios.post(`${BASE_URL}/user/${id}`, {});
+function getTimeline(id,offset) {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/user/${id}?offset=${offset}`, config);
   return promise;
 }
 
@@ -172,6 +172,13 @@ function getRepostInfo(postId) {
   const promise = axios.get(`${BASE_URL}/reposts/${postId.postId}`);
   return promise;
 }
+function getIsFollowing(userId){
+  const promise = axios.get(`${BASE_URL}/isfollowing/${userId}`);
+  return promise;
+
+
+}
+
 
 function getFollowStatus(followerId, followedId){
   const config = createHeaders();
@@ -206,5 +213,6 @@ export {
   getComments,
   postComments,
   getCounting,
+  getIsFollowing,
   getFollowStatus
 };

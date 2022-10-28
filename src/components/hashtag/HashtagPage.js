@@ -1,30 +1,40 @@
 import styled from "styled-components";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useRef ,useState} from "react";
 import Trending from "./Trending";
 import { useNavigate, useParams } from "react-router-dom";
-import Title from "./Title";
-import { useState } from "react";
-import { Publication } from "../timeline/Publication";
+import { Publication ,EditPublication,} from "../timeline/Publication";
 import { ReactTagify } from "react-tagify";
-import { getHashtagPosts } from "../../service/linkrService";
+import { getHashtagPosts,editPost } from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext";
 import HeaderLogout from "../authComponents/HeaderLogout";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {AiOutlineLoading3Quarters} from "react-icons/ai"
+
 
 export default function HashtagPage() {
   const { hashtag } = useParams();
   const [publications, setPublications] = useState([]);
   const { refresh, setRefresh } = useContext(UserContext);
   const navigate = useNavigate();
-
+  const [offset,setOffset]=useState(0);
+  const [timelineLength,setTimelineLength]=useState("");
+  const [isEditingPostId, setIsEditingPostId] = useState(null);
+  const [disabled, setDisabled] = useState("");
+  const [hasMore,setHasMore]=useState(true)
+  
   useEffect(() => {
-    setPublications();
     getHashtag(hashtag);
-  }, [refresh]);
+  }, []);
 
-  function getHashtag(tag) {
-    getHashtagPosts(tag)
+  async function getHashtag(tag) {
+  
+    console.log('offset1',offset)
+    getHashtagPosts(tag,offset)
       .then((answer) => {
-        setPublications(answer.data);
+        setPublications(answer.data.listPosts);
+        setTimelineLength(answer.data.length[0].count)
+        
+        console.log('offset2',offset)
       })
       .catch((error) => {
         alert(
@@ -33,32 +43,149 @@ export default function HashtagPage() {
       });
   }
 
-  function navigateToHashtagPage(tag) {
+  async function infintyLoad(){
+    setOffset(offset+10)
+    getHashtagPosts(tag,offset)
+      .then((answer) => {
+        setPublications([...publications,...answer.data.listPosts]);
+        setTimelineLength(answer.data.length[0].count)
+        setOffset(offset+10)
+        if(timelineLength-offset>0){
+          setHasMore(true);
+        }else{
+          setHasMore(false)
+        }
+      })
+      .catch((error) => {
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+      });
+  }
+
+
+
+
+  async function navigateToHashtagPage(tag) {
+    console.log('offset3',offset)
     getHashtag(tag);
     const hashtag = tag.replace("#", "");
     navigate(`/hashtag/${hashtag}`);
     return;
   }
+  function handleEditClick(postId) {
+    setIsEditingPostId(postId);
+  }
+
+  function handleCancelEdit() {
+    setIsEditingPostId(null);
+  }
+
+  function handleSendEdit(e, postId) {
+    e.preventDefault();
+    const body = { newText: newText };
+    setDisabled("Disabled");
+    editPost(postId, body)
+      .then(() => {
+        //console.log(postId);
+        setIsEditingPostId(null);
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert(`You can only edit you own posts!`);
+          setIsEditingPostId(null);
+        } else {
+          alert(
+            `There was an error in editing this post. Alterations could not be saved.`
+          );
+          setDisabled("");
+        }
+
+        console.log(postId);
+      });
+  }
+
+  function handleKeyDown(e, postId) {
+    if (e.keyCode === 27) {
+      handleCancelEdit();
+      //console.log(postId);
+    }
+    if (e.keyCode === 13) {
+      handleSendEdit(e, postId);
+      //console.log(postId);
+    }
+  }
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditingPostId) {
+      inputRef.current.focus();
+    }
+  }, [isEditingPostId]);
 
   return (
     <Wrapper>
-      <HeaderLogout></HeaderLogout>
-      <TW>
-        <Title data={`# ${hashtag}`} />
-      </TW>{" "}
+      <HeaderLogout />
       <WrapperH>
-        {refresh === false ? (
-          <WrapperContent>
-            {publications ? (
-              publications.map((value, key) => (
-                <PubWrapper>
+        <Wrapper>
+          <Title>
+            <h1># {hashtag}</h1>
+          </Title>
+          <InfiniteScroll
+            loader={
+            <Loading>
+              <AiOutlineLoading3Quarters color="#6D6D6D" size="36px" ></AiOutlineLoading3Quarters>
+              <h1>Loading more posts...</h1>
+            </Loading>}
+            next={infintyLoad}
+            hasMore={hasMore}
+            dataLength={publications.length}
+            scrollThreshold={1}
+          >
+            {
+            publications.length === 0 ? (
+              <Title>
+                <h1>There are no posts yet</h1>
+              </Title>
+            ) : (
+              publications.map((value, key) =>
+                isEditingPostId === value.id ? (
+                  <form onSubmit={handleSendEdit}>
+                    <EditPublication
+                      key={key}
+                      id={value.id}
+                      text={
+                        <ReactTagify
+                          colors="white"
+                          tagClicked={(tag) => navigateToHashtagPage(tag)}
+                        >
+                          {value.text}
+                        </ReactTagify>
+                      }
+                      placeholder={value.text}
+                      url={value.url}
+                      description={value.description}
+                      image={value.image}
+                      title={value.title}
+                      urlImage={value.urlImage}
+                      name={value.name}
+                      inputRef={inputRef}
+                      handleCancelEdit={handleCancelEdit}
+                      handleKeyDown={handleKeyDown}
+                      setNewText={setNewText}
+                      disabled={disabled}
+                    />
+                  </form>
+                ) : (
                   <Publication
                     key={key}
+                    userId={value.userId}
                     id={value.id}
                     text={
                       <ReactTagify
                         colors="white"
-                        tagClicked={(tag) => navigate(`/hashtag/${tag}`)}
+                        tagClicked={(tag) => navigateToHashtagPage(tag)}
                       >
                         {value.text}
                       </ReactTagify>
@@ -69,21 +196,17 @@ export default function HashtagPage() {
                     title={value.title}
                     urlImage={value.urlImage}
                     name={value.name}
+                    handleEditClick={handleEditClick}
                   ></Publication>
-                </PubWrapper>
-              ))
-            ) : (
-              <Title>
-                <h1>Loading...</h1>
-              </Title>
-            )}
-          </WrapperContent>
-        ) : (
-          <></>
-        )}
-        <WT>
-          <Trending onClick={(tag) => navigateToHashtagPage(tag)} />
-        </WT>
+                )
+              )
+            )
+            
+          }
+        </InfiniteScroll>
+        </Wrapper>
+        <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
+        <Wrapper></Wrapper>
       </WrapperH>
     </Wrapper>
   );
@@ -93,65 +216,41 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-
-  @media (max-width: 650px) {
-    * {
-      box-sizing: border-box;
-    }
-
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-`;
-
-const TW = styled.div`
-  position: fixed;
-  top: 15%;
-  right: 0%;
-  width: 100%;
-  height: 10%;
-
-  @media (max-width: 650px) {
-    * {
-      box-sizing: border-box;
-    }
-    display: flex;
-    width: 100%;
-    position: relative;
-    top: 80px;
-  }
-`;
-
-const WT = styled.span`
- margin-top: 5px;
-  @media (max-width: 650px) {
-    * {
-      box-sizing: border-box;
-    }
-    display: none;
-  }
-`;
-const WrapperContent = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
- margin-top: 30px;
- 
- @media (max-width: 650px) {
-    margin-top: 10px;
-  }
-  top: 200px;
-  display: flex;
-  flex-direction: column;
- 
 `;
 
 const WrapperH = styled.div`
   display: flex;
 `;
 
-const PubWrapper = styled.div`
-  margin-top: -20px;
+const Title = styled.div`
+  width: 100%;
+  margin-top: 100px;
+  margin-bottom: 43px;
+  h1 {
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 43px;
+    line-height: 64px;
+    color: #ffffff;
+
+    @media (max-width: 650px) {
+      margin-left: 5%;
+      margin-top: 50px;
+    }
+  }
 `;
+const Loading =styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  h1{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: 0.05em;
+    color: #6D6D6D;
+  }
+`

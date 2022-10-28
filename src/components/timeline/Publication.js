@@ -11,8 +11,6 @@ import {
   CommentsCounting,
   Comments,
 } from "../comments/Comments.js";
-
-
 import { useNavigate } from "react-router-dom";
 import ModalRepost from "./RepostModal.js";
 import { FaRetweet } from "react-icons/fa";
@@ -39,7 +37,7 @@ function Publication({
   }, []);
   
 
-  function getCountComments() {
+  function getCountComments(id) {
     getCounting(id)
       .then((answer) => {
         setCountComments(answer.data); 
@@ -60,14 +58,10 @@ function Publication({
       <PublicationDiv>
         <WrapperH>
           <WrapperPublicationProfile>
-          <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
-          <LikeDiv>
+            <img onClick={() => navigate(`/user/${userId}`)} src={urlImage} />
             <Like postId={id} />
             <ModalRepost postId={id} />
-          </LikeDiv>
-            <CommentsCountWrapper>
-              <CommentsCounting  countComments={countComments} onClick={() => openCommentBox()} />
-            </CommentsCountWrapper>
+            <CommentsCounting  countComments={countComments} onClick={() => openCommentBox()} />
           </WrapperPublicationProfile>
           <WrapperPublication>
             <Icons>
@@ -86,7 +80,7 @@ function Publication({
         </WrapperH>
       </PublicationDiv>
       {openComment ? (
-        <Comments id={id} urlImage={userImage} onSend={() => getCountComments()}/>
+        <Comments id={id} urlImage={urlImage} onSend={() => getCountComments(id)}/>
       ) : (
         <></>
       )}
@@ -208,7 +202,7 @@ function AddPublication() {
   const [button, setButton] = useState("Publish");
   const userImage = JSON.parse(localStorage.getItem("perfilImage"));
   const userId = JSON.parse(localStorage.getItem("userId"));
-
+let navigate = useNavigate();
   function createPost(e) {
     e.preventDefault();
     let body = { id: userId, text, url: link };
@@ -217,7 +211,6 @@ function AddPublication() {
     setButton("Publishing...");
     postPublication(body)
       .then((answer) => {
-        setRefresh(!refresh);
         setText("");
         setLink("");
       })
@@ -231,7 +224,7 @@ function AddPublication() {
     <AddPublicationDiv>
       <WrapperForm onSubmit={createPost}>
         <WrapperAddPublication>
-          <img src={userImage} alt="userImg"></img>
+          <img src={userImage} onClick={() => navigate(`/user/${userId}`)} alt="userImg"></img>
         </WrapperAddPublication>
         <WrapperPublication>
           <h1>What are you going to share today?</h1>
@@ -295,7 +288,10 @@ const WrapperPublication = styled.div`
 
 const WrapperPublicationProfile = styled.div`
   padding-left: 20px;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
   img {
     cursor: pointer;
   }
@@ -383,7 +379,6 @@ const LikeDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 25px;
   cursor: pointer;
 `;
 
@@ -401,14 +396,6 @@ const InputNewText = styled.input`
   color: #4d4d4d;
   margin-bottom: 5px;
   text-align: initial;
-`;
-const CommentsCountWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 25px;
-  cursor: pointer;
 `;
 const ContentWrapper = styled.div`
   display: flex;

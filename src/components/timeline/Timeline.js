@@ -4,7 +4,8 @@ import {
   editPost,
   getPublications,
   getReposts,
-  getNewPublications
+  getNewPublications,
+  getIsFollowing
 } from "../../service/linkrService";
 import {
   Publication,
@@ -19,7 +20,9 @@ import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
 import useInterval from 'use-interval'
 import {HiOutlineRefresh} from "react-icons/hi"
-import axios from "axios";
+import {AiOutlineLoading3Quarters} from "react-icons/ai"
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -34,12 +37,16 @@ export default function Timeline() {
   const [isFollowing,setIsFollowing]=useState([]);
   const [reposts, setReposts] = useState("");
   const userId = JSON.parse(localStorage.getItem("userId"));
-
+  const [hasMore,setHasMore]=useState(true)
+  const [offset,setOffset]=useState(0);
+  
+  
   async function loadPublications(){
-    getPublications()
+    getPublications(userId,offset)
       .then((answer) => {
         setPublications(answer.data.urls);
         setTimelineLength(answer.data.length[0].count)
+        
       })
       .catch((error) => {
         alert(
@@ -48,44 +55,69 @@ export default function Timeline() {
       });
   }
 
-  async function getIsFollowing(){
-    const id = localStorage.getItem("userId") 
-    try {
-      const resp = await axios.get(`https://project-linkr-back.herokuapp.com/isfollowing/${id}`)
-      console.log(resp.data)
-      setIsFollowing(resp.data)
-    } catch (error) {
-      console.log(error)
-    }
+  async function infintyLoad(){
+    setOffset(offset+10)
+    getPublications(userId,offset)
+      .then((answer) => {
+        setPublications([...publications,...answer.data.urls]);
+        setTimelineLength(answer.data.length[0].count)
+        setOffset(offset+10)
+        if(timelineLength-offset>0){
+          setHasMore(true);
+        }else{
+          setHasMore(false)
+        }
+      })
+      .catch((error) => {
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        );
+      });
   }
 
-  useEffect(()=>{getIsFollowing()}, [])
+
+
+  useEffect(()=>{
+    getIsFollowing(userId)
+     .then((answer)=>{
+      setIsFollowing(answer.data)
+     })
+     .catch((error) => {
+      alert(
+        "An error occured while trying to fetch the posts, please refresh the page"
+      );
+    });
+  
+  }, [])
 
   useEffect(()=>{loadPublications()}, [refresh]);
 
   useInterval(() => {
-    getNewPublications(timelineLength)
+    
+    getNewPublications(userId,timelineLength)
       .then((answer) => {
         setNewPostNumber(answer.data.newPublicationLength)
         if(newPostNumber>0){
           setHasNew(
           <NewPosts onClick={()=>{
-            ref()
+            updateTimeline()
             }}>
             <h5>{newPostNumber} new posts, load more!</h5>
             <HiOutlineRefresh color="white" size="22px"></HiOutlineRefresh>
           </NewPosts>)
+          
         }
       })
       .catch((error) => {
       alert(error);
     });
-  },5000)
+  },15000)
 
-  async function ref (){
+  async function updateTimeline (){
     setRefresh(!refresh)
     setHasNew('')
     setNewPostNumber(0)
+    setOffset(0)
   }
 
   useEffect(() => {
@@ -161,7 +193,6 @@ export default function Timeline() {
   return (
     <Wrapper>
       <HeaderLogout />
-
       <WrapperH>
         <Wrapper>
           <Title>
@@ -169,7 +200,18 @@ export default function Timeline() {
           </Title>
           <AddPublication></AddPublication>
           {hasNew}
-          {isFollowing.length > 0 ? publications ? (
+          <InfiniteScroll
+            loader={
+            <Loading>
+              <AiOutlineLoading3Quarters color="#6D6D6D" size="36px" ></AiOutlineLoading3Quarters>
+              <h1>Loading more posts...</h1>
+            </Loading>}
+            next={infintyLoad}
+            hasMore={hasMore}
+            dataLength={publications.length}
+            scrollThreshold={1}
+          >
+            {isFollowing.length > 0 ? (
             publications.length === 0 ? (
               <Title>
                 <h1>There are no posts yet</h1>
@@ -227,14 +269,12 @@ export default function Timeline() {
                 )
               )
             )
-          ) : (
-            <Title>
-              <h1>Loading...</h1>
-            </Title>
-          ) : <Title>
+          )  : 
+          <Title>
           <h1>You don't follow anyone yet. Search for new friends!</h1>
         </Title>}
-          
+        </InfiniteScroll>
+            
 
           {reposts ? (
             reposts.map((value, key) => (
@@ -271,7 +311,23 @@ export default function Timeline() {
     </Wrapper>
   );
 }
+const Loading =styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  h1{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: 0.05em;
+    color: #6D6D6D;
 
+
+  }
+
+`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
