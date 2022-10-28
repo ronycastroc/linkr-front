@@ -27,6 +27,7 @@ const customStyles = {
     fontSize: "34px",
     textAlign: "center",
   },
+  overlay: {zIndex: 1000}
 };
 
 export default function ModalRepost(postId) {
