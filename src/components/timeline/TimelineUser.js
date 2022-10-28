@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams,useNavigate } from "react-router-dom"
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components"
 import { Publication } from "./Publication.js"
@@ -7,6 +7,7 @@ import { followUser, getFollower, getTimeline, unfollowUser } from "../../servic
 import Trending from "../hashtag/Trending.js";
 import UserContext from "../../contexts/Usercontext.js";
 
+
 export default function TimelineUser() {
     const [posts, setPosts] = useState([])
     const { id } = useParams()
@@ -14,7 +15,7 @@ export default function TimelineUser() {
     const [disabled, setDisabled] = useState(true);
     const { refresh, setRefresh } = useContext(UserContext);
     const userJsonId = JSON.parse(localStorage.getItem("userId"));
-
+    const navigate = useNavigate();
     async function getTimelineUser() {
         try {
             const resp = await getTimeline(id)
@@ -23,6 +24,12 @@ export default function TimelineUser() {
             console.log(error)
         }
     }
+    
+    function navigateToHashtagPage(tag) {
+        const hashtag = tag.replace("#", "");
+        navigate(`/hashtag/${hashtag}`);
+        return;
+      }
 
     useEffect(() => {
         getTimelineUser()

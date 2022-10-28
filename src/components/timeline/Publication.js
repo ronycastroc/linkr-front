@@ -11,8 +11,6 @@ import {
   CommentsCounting,
   Comments,
 } from "../comments/Comments.js";
-
-
 import { useNavigate } from "react-router-dom";
 import ModalRepost from "./RepostModal.js";
 import { FaRetweet } from "react-icons/fa";
@@ -39,7 +37,7 @@ function Publication({
   }, []);
   
 
-  function getCountComments() {
+  function getCountComments(id) {
     getCounting(id)
       .then((answer) => {
         setCountComments(answer.data); 

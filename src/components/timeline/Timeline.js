@@ -19,6 +19,7 @@ import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
 import useInterval from 'use-interval'
 import {HiOutlineRefresh} from "react-icons/hi"
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -56,7 +57,7 @@ export default function Timeline() {
         if(newPostNumber>0){
           setHasNew(
           <NewPosts onClick={()=>{
-            ref()
+            updateTimeline()
             }}>
             <h5>{newPostNumber} new posts, load more!</h5>
             <HiOutlineRefresh color="white" size="22px"></HiOutlineRefresh>
@@ -68,7 +69,7 @@ export default function Timeline() {
     });
   },5000)
 
-  async function ref (){
+  async function updateTimeline (){
     setRefresh(!refresh)
     setHasNew('')
     setNewPostNumber(0)
