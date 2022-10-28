@@ -51,7 +51,7 @@ export default function Timeline() {
   async function getIsFollowing(){
     const id = localStorage.getItem("userId") 
     try {
-      const resp = await axios.get(`http://localhost:4000/isfollowing/${id}`)
+      const resp = await axios.get(`https://project-linkr-back.herokuapp.com/isfollowing/${id}`)
       console.log(resp.data)
       setIsFollowing(resp.data)
     } catch (error) {
