@@ -22,7 +22,8 @@ const customStyles = {
     fontWeight: "700",
     fontSize: "34px",
     textAlign: "center",
-  },
+  }, 
+  overlay: {zIndex: 1000}
 };
 
 export default function ModalDelete(postId) {
