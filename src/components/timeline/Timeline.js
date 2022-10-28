@@ -22,7 +22,7 @@ import useInterval from 'use-interval'
 import {HiOutlineRefresh} from "react-icons/hi"
 import {AiOutlineLoading3Quarters} from "react-icons/ai"
 import InfiniteScroll from 'react-infinite-scroll-component';
-import axios from "axios";
+
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -56,12 +56,12 @@ export default function Timeline() {
   }
 
   async function infintyLoad(){
-    setOffset(offset+5)
+    setOffset(offset+10)
     getPublications(userId,offset)
       .then((answer) => {
         setPublications([...publications,...answer.data.urls]);
         setTimelineLength(answer.data.length[0].count)
-        setOffset(offset+5)
+        setOffset(offset+10)
         if(timelineLength-offset>0){
           setHasMore(true);
         }else{
@@ -111,7 +111,7 @@ export default function Timeline() {
       .catch((error) => {
       alert(error);
     });
-  },5000)
+  },15000)
 
   async function updateTimeline (){
     setRefresh(!refresh)

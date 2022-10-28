@@ -1,15 +1,17 @@
 import { useParams,useNavigate } from "react-router-dom"
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState,useRef } from "react";
 import styled from "styled-components"
 import { Publication } from "./Publication.js"
 import HeaderLogout from "../authComponents/HeaderLogout.js";
 import { followUser, getFollower, getTimeline, unfollowUser } from "../../service/linkrService.js";
 import Trending from "../hashtag/Trending.js";
 import UserContext from "../../contexts/Usercontext.js";
-
-
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {AiOutlineLoading3Quarters} from "react-icons/ai"
+import { ReactTagify } from "react-tagify";
 export default function TimelineUser() {
     
+    const [reposts, setReposts] = useState("");
     const [publications, setPublications] = useState("");
     const { id } = useParams()
     const [isFollowed, setIsFollowed] = useState([]);
@@ -17,23 +19,103 @@ export default function TimelineUser() {
     const { refresh, setRefresh } = useContext(UserContext);
     const userJsonId = JSON.parse(localStorage.getItem("userId"));
     const navigate = useNavigate();
-    
+    const [timelineLength,setTimelineLength]=useState("");
+    const [hasMore,setHasMore]=useState(true)
+    const [offset,setOffset]=useState(0);
+    const [isEditingPostId, setIsEditingPostId] = useState(null);
     async function getTimelineUser() {
         try {
-            const resp = await getTimeline(id)
-            setPublications(resp.data)
+            const answer = await getTimeline(id,offset)
+            setPublications(answer.data.posts)
+            setTimelineLength(answer.data.length[0].count)
         } catch (error) {
             console.log(error)
         }
-    }
+    };
+    async function infintyLoad(){
+        setOffset(offset+10)
+        getTimeline(id,offset)
+          .then((answer) => {
+            setPublications([...publications,...answer.data.posts]);
+            setTimelineLength(answer.data.length[0].count)
+            setOffset(offset+10)
+            if(timelineLength-offset>0){
+              setHasMore(true);
+            }else{
+              setHasMore(false)
+            }
+          })
+          .catch((error) => {
+            alert(
+              "An error occured while trying to fetch the posts, please refresh the page"
+            );
+          });
+      }
     
     function navigateToHashtagPage(tag) {
         const hashtag = tag.replace("#", "");
         navigate(`/hashtag/${hashtag}`);
         return;
       }
+      function navigateToHashtagPage(tag) {
+        const hashtag = tag.replace("#", "");
+        navigate(`/hashtag/${hashtag}`);
+        return;
+      }
+    
+      function handleEditClick(postId) {
+        setIsEditingPostId(postId);
+      }
+    
+      function handleCancelEdit() {
+        setIsEditingPostId(null);
+      }
+    
+      function handleSendEdit(e, postId) {
+        e.preventDefault();
+        const body = { newText: newText };
+        setDisabled("Disabled");
+        editPost(postId, body)
+          .then(() => {
+            //console.log(postId);
+            setIsEditingPostId(null);
+            setRefresh(!refresh);
+          })
+          .catch((error) => {
+            if (error.response.status === 401) {
+              alert(`You can only edit you own posts!`);
+              setIsEditingPostId(null);
+            } else {
+              alert(
+                `There was an error in editing this post. Alterations could not be saved.`
+              );
+              setDisabled("");
+            }
+    
+            console.log(postId);
+          });
+      }
+    
+      function handleKeyDown(e, postId) {
+        if (e.keyCode === 27) {
+          handleCancelEdit();
+          //console.log(postId);
+        }
+        if (e.keyCode === 13) {
+          handleSendEdit(e, postId);
+          //console.log(postId);
+        }
+      }
+      const inputRef = useRef(null);
+    
+      useEffect(() => {
+        if (isEditingPostId) {
+          inputRef.current.focus();
+        }
+      }, [isEditingPostId]);
+    
 
-    useEffect(() => {getTimelineUser()},[]);
+    useEffect(() => {getTimelineUser()},[refresh]);
 
     async function followUnfollow() {
         setRefresh(!refresh);
@@ -71,13 +153,13 @@ export default function TimelineUser() {
                 setDisabled(false)
             })
             .catch((error) => console.log(error))
-    }, []);
+    }, [refresh]);
 
     return (
         <Wrapper>
-            <HeaderLogout />
-            <WrapperH>
-                {userJsonId === Number(id) ? ("") : (
+      <HeaderLogout />
+      <WrapperH>
+        {userJsonId === Number(id) ? ("") : (
                     <ButtonFollow
                         disabled={disabled}
                         isFollowed={isFollowed.length === 0}
@@ -86,33 +168,114 @@ export default function TimelineUser() {
                             (<p>Follow</p>) :
                             (<p>Unfollow</p>)}
                     </ButtonFollow>)}
+        <Wrapper>
+        {publications.length > 0 ? (<Title><h1>{publications[0].name} publications</h1></Title>) : (<Title><h1>Timeline</h1></Title>)}
+          <InfiniteScroll
+            loader={
+            <Loading>
+              <AiOutlineLoading3Quarters color="#6D6D6D" size="36px" ></AiOutlineLoading3Quarters>
+              <h1>Loading more posts...</h1>
+            </Loading>}
+            next={infintyLoad}
+            hasMore={hasMore}
+            dataLength={publications.length}
+            scrollThreshold={1}
+          >
+            {
+            publications.length === 0 ? (
+              <Title>
+                <h1>There are no posts yet</h1>
+              </Title>
+            ) : (
+              publications.map((value, key) =>
+                isEditingPostId === value.id ? (
+                  <form onSubmit={handleSendEdit}>
+                    <EditPublication
+                      key={key}
+                      id={value.id}
+                      text={
+                        <ReactTagify
+                          colors="white"
+                          tagClicked={(tag) => navigateToHashtagPage(tag)}
+                        >
+                          {value.text}
+                        </ReactTagify>
+                      }
+                      placeholder={value.text}
+                      url={value.url}
+                      description={value.description}
+                      image={value.image}
+                      title={value.title}
+                      urlImage={value.urlImage}
+                      name={value.name}
+                      inputRef={inputRef}
+                      handleCancelEdit={handleCancelEdit}
+                      handleKeyDown={handleKeyDown}
+                      setNewText={setNewText}
+                      disabled={disabled}
+                    />
+                  </form>
+                ) : (
+                  <Publication
+                    key={key}
+                    userId={value.userId}
+                    id={value.id}
+                    text={
+                      <ReactTagify
+                        colors="white"
+                        tagClicked={(tag) => navigateToHashtagPage(tag)}
+                      >
+                        {value.text}
+                      </ReactTagify>
+                    }
+                    url={value.url}
+                    description={value.description}
+                    image={value.image}
+                    title={value.title}
+                    urlImage={value.urlImage}
+                    name={value.name}
+                    handleEditClick={handleEditClick}
+                  ></Publication>
+                )
+              )
+            
+          )}
+        </InfiniteScroll>
+            
 
-                <Wrapper>
-                    {publications.length > 0 ? (<Title><h1>{publications[0].name} publications</h1></Title>) : (<Title><h1>Timeline</h1></Title>)}
-                    {publications ? (publications.length === 0 ? (<Title><h1>There are no posts yet</h1></Title>) : (
-                        publications.map((post, key) =>
-                            <Publication
-                                key={key}
-                                id={post.id}
-                                text={post.text}
-                                url={post.url}
-                                description={post.description}
-                                image={post.image}
-                                title={post.title}
-                                urlImage={post.urlImage}
-                                name={post.name}
-                                userId={id}
-                            ></Publication>
-                        )
-
-                    )) : (<Title><h1>Loading...</h1></Title>)}
-                </Wrapper>
-                <Wrapper>
-
-                </Wrapper>
-                <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
-            </WrapperH>
+          {reposts ? (
+            reposts.map((value, key) => (
+              <RepostedPublication
+                key={key}
+                userId={value.userId}
+                id={value.id}
+                text={
+                  <ReactTagify
+                    colors="white"
+                    tagClicked={(tag) => navigateToHashtagPage(tag)}
+                  >
+                    {value.text}
+                  </ReactTagify>
+                }
+                url={value.url}
+                description={value.description}
+                image={value.image}
+                title={value.title}
+                urlImage={value.urlImage}
+                name={value.name}
+                reposterName={value.reposterName}
+                reposterId={value.reposterId}
+                loggedId={userId}
+              ></RepostedPublication>
+            ))
+          ) : (
+            <></>
+          )}
         </Wrapper>
+        <Trending onClick={(tag) => navigateToHashtagPage(tag)}></Trending>
+        <Wrapper></Wrapper>
+      </WrapperH>
+    </Wrapper>
 
     )
 }
@@ -171,3 +334,20 @@ color: ${props => props.isFollowed ? "#FFFFFF" : "#1877F2"};
     width: 90px;
 }
 `;
+const Loading =styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  h1{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 26px;
+    letter-spacing: 0.05em;
+    color: #6D6D6D;
+
+
+  }
+
+`

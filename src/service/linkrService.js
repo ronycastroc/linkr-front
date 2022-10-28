@@ -116,8 +116,9 @@ function postComments(postId,body){
   return promise;
 }
 
-function getTimeline(id) {
-  const promise = axios.post(`${BASE_URL}/user/${id}`, {});
+function getTimeline(id,offset) {
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/user/${id}?offset=${offset}`, config);
   return promise;
 }
 

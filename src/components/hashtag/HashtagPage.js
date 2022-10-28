@@ -44,12 +44,12 @@ export default function HashtagPage() {
   }
 
   async function infintyLoad(){
-    setOffset(offset+5)
+    setOffset(offset+10)
     getHashtagPosts(tag,offset)
       .then((answer) => {
         setPublications([...publications,...answer.data.listPosts]);
         setTimelineLength(answer.data.length[0].count)
-        setOffset(offset+5)
+        setOffset(offset+10)
         if(timelineLength-offset>0){
           setHasMore(true);
         }else{
