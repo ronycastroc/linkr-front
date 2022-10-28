@@ -164,6 +164,12 @@ function getRepostInfo(postId) {
   return promise;
 }
 
+function getFollowStatus(followerId, followedId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/follows/${followerId}/${followedId}`,config);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -189,5 +195,6 @@ export {
   getRepostInfo,
   getComments,
   postComments,
-  getCounting
+  getCounting,
+  getFollowStatus
 };

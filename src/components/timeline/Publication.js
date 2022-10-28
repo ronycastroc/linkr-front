@@ -32,7 +32,7 @@ function Publication({
   const [openComment, setOpenComment] = useState(false);
   const [countComments, setCountComments] = useState(0);
   let navigate = useNavigate();
-
+  const userImage = JSON.parse(localStorage.getItem("perfilImage"));
 
   useEffect(() => {
     getCountComments(id);
@@ -86,7 +86,7 @@ function Publication({
         </WrapperH>
       </PublicationDiv>
       {openComment ? (
-        <Comments id={id} urlImage={urlImage} onSend={() => getCountComments()}/>
+        <Comments id={id} urlImage={userImage} onSend={() => getCountComments()}/>
       ) : (
         <></>
       )}
