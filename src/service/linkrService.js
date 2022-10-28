@@ -1,8 +1,8 @@
 import axios from "axios";
 
-//const BASE_URL = "https://project-linkr-back.herokuapp.com";
+const BASE_URL = "https://project-linkr-back.herokuapp.com";
 
-const BASE_URL = "http://localhost:4000"; 
+//const BASE_URL = "http://localhost:4000"; 
 
 function createHeaders() {
   const auth = JSON.parse(localStorage.getItem("token"));
@@ -180,6 +180,12 @@ function getIsFollowing(userId){
 }
 
 
+function getFollowStatus(followerId, followedId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/follows/${followerId}/${followedId}`,config);
+  return promise;
+}
+
 export {
   postSignUp,
   postSignIn,
@@ -207,5 +213,6 @@ export {
   getComments,
   postComments,
   getCounting,
-  getIsFollowing
+  getIsFollowing,
+  getFollowStatus
 };
