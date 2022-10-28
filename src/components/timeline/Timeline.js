@@ -168,6 +168,7 @@ export default function Timeline() {
             <h1>Timeline</h1>
           </Title>
           <AddPublication></AddPublication>
+          {hasNew}
           {isFollowing.length > 0 ? publications ? (
             publications.length === 0 ? (
               <Title>
