@@ -31,10 +31,19 @@ function postPublication(body) {
   return promise;
 }
 function getPublications() {
+  const id = localStorage.getItem("userId")
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/timeline`, config);
+  const promise = axios.get(`${BASE_URL}/timeline/${id}`, config);
   return promise;
 }
+
+function getNewPublications(length){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/update?length=${length}`, config);
+  return promise;
+}
+
+
 function getHashtagTrending() {
   const config = createHeaders();
   const promise = axios.get(`${BASE_URL}/trending`, config);
@@ -88,6 +97,23 @@ function getHashtagPosts(hashtagName) {
 function editPost(postId, body) {
   const config = createHeaders();
   const promise = axios.put(`${BASE_URL}/timeline/${postId}`, body, config);
+  return promise;
+}
+
+function getComments(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/${postId}`,config);
+  return promise;
+}
+function getCounting(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/count/${postId}`,config);
+  return promise;
+}
+
+function postComments(postId,body){
+  const config = createHeaders();
+  const promise = axios.post(`${BASE_URL}/comments/${postId}`,body, config);
   return promise;
 }
 
@@ -167,7 +193,11 @@ export {
   getFollower,
   followUser,
   unfollowUser,
+  getNewPublications,
   repostPost,
   getReposts,
   getRepostInfo,
+  getComments,
+  postComments,
+  getCounting
 };
