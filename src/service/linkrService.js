@@ -31,8 +31,9 @@ function postPublication(body) {
   return promise;
 }
 function getPublications() {
+  const id = localStorage.getItem("userId")
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/timeline`, config);
+  const promise = axios.get(`${BASE_URL}/timeline/${id}`, config);
   return promise;
 }
 
