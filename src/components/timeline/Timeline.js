@@ -19,6 +19,7 @@ import Trending from "../hashtag/Trending";
 import { useNavigate } from "react-router-dom";
 import useInterval from 'use-interval'
 import {HiOutlineRefresh} from "react-icons/hi"
+import axios from "axios";
 
 export default function Timeline() {
   const [publications, setPublications] = useState("");
@@ -46,6 +47,19 @@ export default function Timeline() {
         );
       });
   }
+
+  async function getIsFollowing(){
+    const id = localStorage.getItem("userId") 
+    try {
+      const resp = await axios.get(`http://localhost:4000/isfollowing/${id}`)
+      console.log(resp.data)
+      setIsFollowing(resp.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{getIsFollowing()}, [])
 
   useEffect(()=>{loadPublications()}, [refresh]);
 
@@ -155,7 +169,7 @@ export default function Timeline() {
           </Title>
           <AddPublication></AddPublication>
           {hasNew}
-          {publications ? (
+          {isFollowing.length > 0 ? publications ? (
             publications.length === 0 ? (
               <Title>
                 <h1>There are no posts yet</h1>
@@ -217,7 +231,10 @@ export default function Timeline() {
             <Title>
               <h1>Loading...</h1>
             </Title>
-          )}
+          ) : <Title>
+          <h1>You don't follow anyone yet. Search for new friends!</h1>
+        </Title>}
+          
 
           {reposts ? (
             reposts.map((value, key) => (
