@@ -9,17 +9,19 @@ import UserContext from "../../contexts/Usercontext.js";
 
 
 export default function TimelineUser() {
-    const [posts, setPosts] = useState([])
+    
+    const [publications, setPublications] = useState("");
     const { id } = useParams()
     const [isFollowed, setIsFollowed] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const { refresh, setRefresh } = useContext(UserContext);
     const userJsonId = JSON.parse(localStorage.getItem("userId"));
     const navigate = useNavigate();
+    
     async function getTimelineUser() {
         try {
             const resp = await getTimeline(id)
-            setPosts(resp.data)
+            setPublications(resp.data)
         } catch (error) {
             console.log(error)
         }
@@ -31,12 +33,9 @@ export default function TimelineUser() {
         return;
       }
 
-    useEffect(() => {
-        getTimelineUser()
-        .then(() => setRefresh(!refresh))
-    }, [refresh]);
+    useEffect(() => {getTimelineUser()},[]);
 
-    function followUnfollow() {
+    async function followUnfollow() {
         setRefresh(!refresh);
         setDisabled(true);
 
@@ -72,7 +71,7 @@ export default function TimelineUser() {
                 setDisabled(false)
             })
             .catch((error) => console.log(error))
-    }, [refresh]);
+    }, []);
 
     return (
         <Wrapper>
@@ -89,9 +88,9 @@ export default function TimelineUser() {
                     </ButtonFollow>)}
 
                 <Wrapper>
-                    {posts.length > 0 ? (<Title><h1>{posts[0].name} posts</h1></Title>) : (<Title><h1>Timeline</h1></Title>)}
-                    {posts ? (posts.length === 0 ? (<Title><h1>There are no posts yet</h1></Title>) : (
-                        posts.map((post, key) =>
+                    {publications.length > 0 ? (<Title><h1>{publications[0].name} publications</h1></Title>) : (<Title><h1>Timeline</h1></Title>)}
+                    {publications ? (publications.length === 0 ? (<Title><h1>There are no posts yet</h1></Title>) : (
+                        publications.map((post, key) =>
                             <Publication
                                 key={key}
                                 id={post.id}

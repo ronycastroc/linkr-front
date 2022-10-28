@@ -29,7 +29,7 @@ export default function Like(postId) {
           "An error occured while trying to fetch likes, please refresh the page"
         );
       });
-  }, [refresh]);
+  },[]);
 
   useEffect(() => {
     getUserLikes(postId, userId)
@@ -43,31 +43,66 @@ export default function Like(postId) {
           "An error occured while trying to fetch user likes, please refresh the page"
         );
       });
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     getLikesInfo(postId)
       .then((answer) => {
         setInfo(answer.data);
-        /* console.log(answer.data);
-        console.log(info); */
       })
       .catch((error) => {
         console.log(
           "An error occured while trying to fetch likes info, please refresh the page"
         );
       });
-  }, [refresh]);
+  }, []);
 
   function like() {
     const promise = likePost(postId);
     promise
       .then(() => {
         setLiked(true);
-        setRefresh(!refresh);
         console.log(info);
+        getUserLike();
+        getLike();
+        getLikeInfo()
       })
       .catch((err) => console.log(err));
+  }
+  function getUserLike(){
+    getUserLikes(postId, userId)
+    .then((answer) => {
+      if (answer.data.userId === userId) {
+        setLiked(true);
+      }
+    })
+    .catch((error) => {
+      console.log(
+        "An error occured while trying to fetch user likes, please refresh the page"
+      );
+    });
+  }
+  function getLike(){
+    getLikes(postId)
+      .then((answer) => {
+        setLikeCount(answer.data);
+      })
+      .catch((error) => {
+        console.log(
+          "An error occured while trying to fetch likes, please refresh the page"
+        );
+      });
+  }
+  function getLikeInfo(){
+    getLikesInfo(postId)
+      .then((answer) => {
+        setInfo(answer.data);
+      })
+      .catch((error) => {
+        console.log(
+          "An error occured while trying to fetch likes info, please refresh the page"
+        );
+      });
   }
 
   function dislike() {
@@ -75,7 +110,9 @@ export default function Like(postId) {
     promise
       .then(() => {
         setLiked(false);
-        setRefresh(!refresh);
+        getUserLike();
+        getLike();
+        getLikeInfo()
         //console.log(likeCount);
       })
       .catch((err) => console.log(err));
