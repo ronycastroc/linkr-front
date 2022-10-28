@@ -1,8 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaRetweet } from "react-icons/fa";
 import Modal from "react-modal";
-import {} from "../../service/linkrService";
+import {
+  repostPost,
+  getReposts,
+  getRepostInfo,
+} from "../../service/linkrService";
 import UserContext from "../../contexts/Usercontext";
 
 const customStyles = {
@@ -29,7 +33,9 @@ export default function ModalRepost(postId) {
   let subtitle;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [repostCount, setRepostCount] = useState(0);
   const { refresh, setRefresh } = useContext(UserContext);
+  const [name, setName] = useState("");
 
   function openModal() {
     setIsOpen(true);
@@ -43,32 +49,38 @@ export default function ModalRepost(postId) {
     setIsOpen(false);
   }
 
-  /* function delPost() {
-    const promise = deletePost(postId);
-    setLoading(true);
+  function repost() {
+    const promise = repostPost(postId);
     promise
       .then(() => {
-        setIsOpen(false);
         setRefresh(!refresh);
-        setLoading(false);
+        setIsOpen(false);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          alert(`You can only delete you own posts!`);
-          setIsOpen(false);
-          setLoading(false);
-        } else {
-          alert(`An error has occurred, the post couldn't be deleted`);
-          setIsOpen(false);
-          setLoading(false);
-        }
+        alert(`An error has occurred, the post couldn't be shared`);
+        setIsOpen(false);
+        console.log(err);
       });
-  } */
+  }
+
+  useEffect(() => {
+    getRepostInfo(postId)
+      .then((answer) => {
+        setRepostCount(answer.data[0].respostCount);
+        setName(answer.data[0].name);
+        //console.log(answer.data[0]);
+      })
+      .catch((error) => {
+        console.log(
+          "An error occured while trying to fetch reposts, please refresh the page"
+        );
+      });
+  }, [refresh]);
 
   return (
     <Wrapper>
       <FaRetweet color="white" fontSize={"23px"} onClick={openModal} />
-      <RepostsSpan> re-posts</RepostsSpan>
+      <RepostsSpan> {repostCount} re-posts</RepostsSpan>
       {loading ? (
         <Modal
           appElement={document.getElementsByClassName("root") || undefined}
@@ -90,7 +102,7 @@ export default function ModalRepost(postId) {
           onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={customStyles}
-          contentLabel="Delete Post Modal"
+          contentLabel="Repost Modal"
           shouldCloseOnOverlayClick={true}
         >
           <Confirmation>
@@ -101,7 +113,7 @@ export default function ModalRepost(postId) {
 
           <Options>
             <BackButton onClick={closeModal}>No, cancel</BackButton>
-            <ConfirmRepostButton onClick={closeModal}>
+            <ConfirmRepostButton onClick={() => repost()}>
               Yes, share!
             </ConfirmRepostButton>
           </Options>
@@ -163,7 +175,8 @@ const BackButton = styled.div`
 
 const RepostsSpan = styled.span`
   color: white;
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 13px;
 `;
 
 const Wrapper = styled.div`

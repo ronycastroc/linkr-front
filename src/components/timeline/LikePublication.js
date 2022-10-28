@@ -76,7 +76,7 @@ export default function Like(postId) {
       .then(() => {
         setLiked(false);
         setRefresh(!refresh);
-        console.log(likeCount);
+        //console.log(likeCount);
       })
       .catch((err) => console.log(err));
   }

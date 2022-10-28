@@ -31,10 +31,19 @@ function postPublication(body) {
   return promise;
 }
 function getPublications() {
+  const id = localStorage.getItem("userId")
   const config = createHeaders();
-  const promise = axios.get(`${BASE_URL}/timeline`, config);
+  const promise = axios.get(`${BASE_URL}/timeline/${id}`, config);
   return promise;
 }
+
+function getNewPublications(length){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/update?length=${length}`, config);
+  return promise;
+}
+
+
 function getHashtagTrending() {
   const config = createHeaders();
   const promise = axios.get(`${BASE_URL}/trending`, config);
@@ -91,14 +100,33 @@ function editPost(postId, body) {
   return promise;
 }
 
+function getComments(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/${postId}`,config);
+  return promise;
+}
+function getCounting(postId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/count/${postId}`,config);
+  return promise;
+}
+
+function postComments(postId,body){
+  const config = createHeaders();
+  const promise = axios.post(`${BASE_URL}/comments/${postId}`,body, config);
+  return promise;
+}
+
 function getTimeline(id) {
   const promise = axios.post(`${BASE_URL}/user/${id}`, {});
   return promise;
 }
 
-function searchUser(value){
-  const userid = localStorage.getItem("userId")
-  const promise = axios.get(`${BASE_URL}/users?filter=${value}&&userId=${userid}`);
+function searchUser(value) {
+  const userid = localStorage.getItem("userId");
+  const promise = axios.get(
+    `${BASE_URL}/users?filter=${value}&&userId=${userid}`
+  );
   return promise;
 }
 
@@ -125,6 +153,31 @@ function unfollowUser(id) {
   const promise = axios.delete(`${BASE_URL}/unfollow/${id}`, config);
   return promise;
 }
+function repostPost(postId) {
+  const config = createHeaders();
+  const promise = axios.post(
+    `${BASE_URL}/repost/${postId.postId}`,
+    postId,
+    config
+  );
+  return promise;
+}
+
+function getReposts() {
+  const promise = axios.get(`${BASE_URL}/reposts`);
+  return promise;
+}
+
+function getRepostInfo(postId) {
+  const promise = axios.get(`${BASE_URL}/reposts/${postId.postId}`);
+  return promise;
+}
+
+function getFollowStatus(followerId, followedId){
+  const config = createHeaders();
+  const promise = axios.get(`${BASE_URL}/comments/follows/${followerId}/${followedId}`,config);
+  return promise;
+}
 
 export {
   postSignUp,
@@ -145,5 +198,13 @@ export {
   getFollowers,
   getFollower,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getNewPublications,
+  repostPost,
+  getReposts,
+  getRepostInfo,
+  getComments,
+  postComments,
+  getCounting,
+  getFollowStatus
 };
