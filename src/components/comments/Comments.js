@@ -39,7 +39,7 @@ function Comments({ id, urlImage, onSend }) {
         );
       });
   }
-
+  
   return (
     <>
       <ListW>
@@ -57,6 +57,7 @@ function Comments({ id, urlImage, onSend }) {
 }
 
 function ListPostComments({ comments }) {
+ 
   return (
     <>
       {comments.length === 0 ? (
@@ -73,7 +74,7 @@ function ListPostComments({ comments }) {
                   <Username>
                     {" "}
                     <span>{post.name}</span>
-                    <li>{"following"}</li>{" "}
+                    <h3>{post.followStatus}</h3>{" "}
                   </Username>
                   <CommentContent>
                     <p>{post.comment}</p>
@@ -235,7 +236,7 @@ const CommentContent = styled.div`
 const Username = styled.div`
   display: flex;
 
-  li {
+  h3 {
     font-family: "Lato";
     font-style: normal;
     font-weight: 400;
